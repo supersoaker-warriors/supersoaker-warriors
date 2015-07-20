@@ -20,6 +20,7 @@
     "bcrypt-nodejs": "0.0.3",
     "express": "^4.13.1",
     "express-session": "^1.11.3",
-    "firebase": "~2.2.7"
+    "firebase": "~2.2.7",
+    "mongoose": "~4.0.7"
   }
 }

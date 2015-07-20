@@ -1,7 +1,11 @@
 var express = require("express");
+var mongoose = require('mongoose');
+var mongodb = require('mongodb');
 var app = express();
 
 app.use(express.static('Public'));
+
+mongoose.connect('mongodb://localhost/my_database');
 
 var PORT = 3000;
 
