@@ -7,7 +7,6 @@ angular.module('okdoodle', [
   'ui.router'
 ])
 .config(function($stateProvider, $urlRouterProvider) {
-  debugger;
   $urlRouterProvider.otherwise('/profile')
   // $routeProvider
   //   .when('/signin', {
@@ -32,17 +31,17 @@ angular.module('okdoodle', [
   $stateProvider
     .state('signin', {
       url: '/signin',
-      templateUrl: 'app/auth/signin.html',
+      templateUrl: './app/auth/signin.html',
       controller: 'AuthController'
     })
     .state('profile', {
       url: '/profile',
-      templateUrl: 'app/profile/profile.html',
+      templateUrl: './app/profile/profile.html',
       controller: "ProfileController"
     })
     .state('profile.draw', {
       url: '/draw',
-      templateUrl: 'app/draw/draw.html',
+      templateUrl: './app/draw/draw.html',
       controller: 'DrawController'
     });
 
@@ -54,5 +53,4 @@ angular.module('okdoodle', [
 });
 //
 // .factory('AttachTokens', function ($window) {
-  
 // });
