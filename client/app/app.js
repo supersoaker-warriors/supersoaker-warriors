@@ -6,7 +6,7 @@ angular.module('okdoodle', [
   'ui.router'
 ])
 .config(function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('/profile')
+  $urlRouterProvider.otherwise('/draw')
   // $routeProvider
   //   .when('/signin', {
   //     templateUrl: 'app/auth/signin.html',
