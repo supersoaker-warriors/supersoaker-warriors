@@ -58,6 +58,27 @@ app.post('/api/new', function (req, res) {
 
   })
 });
+
+app.post('/api/login', function (req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+  db.find({
+          username: username,
+          password: password
+          }, 
+    function (err, user) {
+      if (err) {
+        console.log(err);
+      }
+      else if (user === null || user === undefined) {
+        res.send("User doesn't exist");
+      }
+      else {
+        res.json(user);
+      }
+    })
+})
+
 app.use(express.static(__dirname+ '/../Public'));
 
 var server = app.listen(PORT, function () {
@@ -66,9 +87,8 @@ var server = app.listen(PORT, function () {
 
   console.log("Server listening at http://%s:%s", host, port);
 
-<<<<<<< HEAD
-});   
-=======
+
+
 });
 
 
@@ -106,4 +126,4 @@ var findAllUsers = function () {
 
 )};
 // findAllUsers();
->>>>>>> f1399a4cced7e5ac299e8f761c4df52f8ed0141d
+
