@@ -9,7 +9,6 @@
   </head>
 <body ng-app='okdoodle'>
     <div class="header">
-
     <div class="navbar navbar-default" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -25,9 +24,9 @@
         </div>
 
         <div class="collapse navbar-collapse" id="js-navbar-collapse">
-
           <!-- "ui-sref" is the ui-router equivalent of "ng-href" -->
           <ul class="nav navbar-nav">
+            <!-- TODO: change active class -->
             <li class="active"><a ui-sref="signin">Sign In</a></li>
             <li><a ui-sref="profile">Profile</a></li>
           </ul>
@@ -39,11 +38,11 @@
   <div class="container">
       <div ui-view></div>
   </div>
-      <div class="footer">
+    <div class="footer">
       <div class="container">
         <p><span class="glyphicon glyphicon-heart"></span>doodle for love</p>
       </div>
-    </div>
+  </div>
 
 
 
