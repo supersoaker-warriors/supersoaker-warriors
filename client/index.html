@@ -1,17 +1,55 @@
 <!-- this is where we will base the app -->
 <!DOCTYPE html>
-<html ng-app='okdoodle' lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title class='jumbotron'>OkDoodle</title>
-  <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
-</head>
-<body>
-  <h1>OkDoodle</h1>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title class='jumbotron'>OkDoodle</title>
+    <link rel="stylesheet" type="text/css" href="./lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/styles.css" />
+  </head>
+<body ng-app='okdoodle'>
+    <div class="header">
 
-  <div ui-view></div>
+    <div class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+          <a class="navbar-brand" href="#/">OkDoodle</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="js-navbar-collapse">
+
+          <!-- "ui-sref" is the ui-router equivalent of "ng-href" -->
+          <ul class="nav navbar-nav">
+            <li class="active"><a ui-sref="signin">Sign In</a></li>
+            <li><a ui-sref="profile">Profile</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+      <div ui-view></div>
+  </div>
+      <div class="footer">
+      <div class="container">
+        <p><span class="glyphicon glyphicon-heart"></span>doodle for love</p>
+      </div>
+    </div>
+
+
+
+
   <script src="lib/angular/angular.js"></script>
+  <!-- we haven't used the ui-router yet -->
   <script src="lib/angular-bootstrap/ui-bootstrap.js"></script>
   <script src="app/auth/signin.js"></script>
   <script src="app/profile/profile.js"></script>
