@@ -65,6 +65,9 @@ var server = app.listen(PORT, function () {
 
   console.log("Server listening at http://%s:%s", host, port);
 
+<<<<<<< HEAD
+});   
+=======
 });
 
 
@@ -102,3 +105,4 @@ var findAllUsers = function () {
 
 )};
 // findAllUsers();
+>>>>>>> f1399a4cced7e5ac299e8f761c4df52f8ed0141d

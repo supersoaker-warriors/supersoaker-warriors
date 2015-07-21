@@ -1,12 +1,8 @@
 // profile.js
-angular.module('okdoodle.profile', [])
+angular.module('okdoodle.profile', ['okdoodle.draw', 'ui.router'])
 
-.controller('ProfileController', function ($scope) {
+.controller('ProfileController', function () {
   // Your code here
-
-})
-.controller('DrawController', function ($scope) {
-  // Your code here
-  debugger;
-
+  // this property is more or less meaningless, for testing purposes
+  this.welcome = 'okdoodle';
 });
