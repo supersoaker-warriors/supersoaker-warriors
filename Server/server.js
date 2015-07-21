@@ -5,6 +5,7 @@ var path = require('path');
 
 var app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());  
 
 var PORT = 3000;
@@ -33,9 +34,8 @@ app.get('/', function (req, res) {
 
 app.post('/api/new', function (req, res) {
   console.log("post request received");
-  console.log(req.body);
+  console.log("body:",  req.body);
   var newUser = db({
-      id: ObjectId,
       username: req.body.username,
       first: req.body.first,
       last: req.body.last,
