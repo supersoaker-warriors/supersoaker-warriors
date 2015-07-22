@@ -59,6 +59,60 @@ app.post('/api/new', function (req, res) {
   })
 });
 
+app.post('/api/update', function (req, res) {
+  var update = req.body;
+  console.log(req.body);
+  console.log("update: ", update);
+  var query = { username: req.body.username };
+
+  db.findOne(query, function (err, user) {
+    if (err) {
+      console.log(err);
+    }
+    for (key in update) {
+      user[key] = update[key];
+
+
+    }
+    console.log(user);
+    res.send("updated");
+    user.save(function (err, user) {
+      if (err) {
+        console.log(err);
+      }
+      console.log('saved successfully!!!!:', user);
+    })
+
+   })
+});
+
+
+  // var update = {    
+  //     first: req.body.first,
+  //     last: req.body.last
+  //     // email: req.body.email,
+  //     // password: req.body.password,
+  //     // age: req.body.age,
+  //     // description: req.body.description,
+  //     // profile_doodle: req.body.profile_doodle,
+  //     // backup_doodle: req.body.backup_doodle
+  //   }
+
+  //   //pull data from database of username
+  //   //loop through the keys of that data
+
+  // db.findOneAndUpdate(query, update, {new: true }, function (err, user) {
+  //     if (err) {
+  //       console.log("error updating record: ", err);
+  //       return res.send(500, { error: err });
+  //     }
+  //     else {
+  //       return res.send("succesfully saved");
+  //     }
+
+  //   })
+  // });
+
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
@@ -92,23 +146,23 @@ var server = app.listen(PORT, function () {
 });
 
 
-var saveUser = function () {
-  console.log("saveUser called");
-  var user2 = new db({username: 'lisasimpson', 
-                      first: 'Lisa',
-                      last: 'Simpson'
-                    });
-  user2.save(function (err, userObj) {
-    if (err) {
-      console.log('error: ', err);
-    }
-    else {
-      console.log('saved successfully:', userObj);
-    }
+// var saveUser = function () {
+//   console.log("saveUser called");
+//   var user2 = new db({username: 'lisasimpson', 
+//                       first: 'Lisa',
+//                       last: 'Simpson'
+//                     });
+//   user2.save(function (err, userObj) {
+//     if (err) {
+//       console.log('error: ', err);
+//     }
+//     else {
+//       console.log('saved successfully:', userObj);
+//     }
 
-  });
+//   });
 
-};
+// };
 //saveUser();
 
 var findAllUsers = function () {
@@ -125,5 +179,6 @@ var findAllUsers = function () {
 
 
 )};
-// findAllUsers();
+findAllUsers();
+
 
