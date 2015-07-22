@@ -44,8 +44,7 @@ app.post('/api/new', function (req, res) {
       password: req.body.password,
       age: req.body.age,
       description: req.body.description,
-      profile_doodle: req.body.profile_doodle,
-      backup_doodle: req.body.backup_doodle
+      doodle_ref_array: req.body.doodle
   })
   newUser.save(function (err, userObj) {
     if (err) {
@@ -119,15 +118,17 @@ app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
   db.find({
-          username: username,
-          password: password
+          username: username
           }, 
     function (err, user) {
       if (err) {
         console.log(err);
       }
-      else if (user === null || user === undefined) {
-        res.send("User doesn't exist");
+      else if (Object.keys(user).length === 0) {
+        res.send("User doesn't exist!");
+      }
+      else if (user.password !== password) {
+        res.send("Password is incorrect!")
       }
       else {
         res.json(user);
