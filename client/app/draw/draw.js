@@ -31,15 +31,19 @@ angular.module('okdoodle.draw', [])
 .directive('canvasDraw', ['$document', function($document) {
   // function that takes care of drawing on canvas
   function doodle(scope, element, attrs) {
-    // console.log(element);
-    var context = element[0].getContext('2d');
-    // true when mouse is down
-    var isDraw = false;
+    // variables for the canvas
+    var pixSize = 8;
     // keep track of x and y
     var prevX;
     var prevY;
     var currX;
     var currY;
+
+    // console.log(element);
+    var context = element[0].getContext('2d');
+    // true when mouse is down
+    var isDraw = false;
+
     element.on('mousedown', function(e) {
       prevX = e.offsetX;
       prevY = e.offsetY;
@@ -71,8 +75,11 @@ angular.module('okdoodle.draw', [])
     function draw(prevX, prevY, currX, currY) {
       context.moveTo(prevX, prevY);
       context.lineTo(currX, currY);
+      // context.lineWidth = 10;
       context.stroke();
       // $scope.apply();
+      // context.stroke(parseInt(prevX)*pixSize, parseInt(prevY)*pixSize, pixSize, pixSize);
+
     }
   }
   return {
