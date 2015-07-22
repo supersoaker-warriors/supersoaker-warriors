@@ -47,6 +47,21 @@ angular.module('okdoodle.draw', [])
     var prevY;
     var currX;
     var currY;
+    var xBitStart;
+    var yBitStart;
+
+    //this function stores coordinates in the temp object. the temp object should be moved at some point,
+    // but it still makes sense to update a drawing in local memory before sending it off to firebase
+    // so we can implement saves and undos
+    function update(xCoord, yCoord, color) {
+      var key = "[" + xCoord + "," + yCoord + "]";
+      var existing = storePic[key];
+      if(existing){
+        return;
+      }
+      storePic[key] = color;
+      console.log(storePic);
+    }
     function drawSequence(e) {
       if(isDraw) {
         currX = e.offsetX;
@@ -54,12 +69,19 @@ angular.module('okdoodle.draw', [])
         // draw method
         // we can't have people drawing rectangles any old place on the 
         // canvas: the x and y coordinates need to be rounded to the nearest
-        // bit corner
-        xBitStart = Math.floor(currX/pixelSize) * pixelSize;
-        yBitStart = Math.floor(currY/pixelSize) * pixelSize;
-        draw(prevX, prevY, xBitStart, yBitStart);
-        prevX = currX;
-        prevY = currY;
+        // bit corner.
+        // the X and Y coordinates that we're gonna store:
+        xCoord = Math.floor(currX/pixelSize);
+        yCoord = Math.floor(currY/pixelSize);
+        xBitStart = xCoord * pixelSize;
+        yBitStart = yCoord * pixelSize;
+        if(!((xCoord === prevX) && (yCoord === prevY))){
+          draw(xBitStart, yBitStart);
+          //third argument should be color variable (hardcoded for now)
+          update(xCoord, yCoord, "000");
+        }
+        prevX = xCoord;
+        prevY = yCoord;
       }
     }
     element.on('mousedown', function(e) {
@@ -80,16 +102,19 @@ angular.module('okdoodle.draw', [])
     });
     element.on('mousemove', function(e) {
       // only begin drawing if mouse is down.
+      // TODO: find out why mouse up doesn't register off canvas
       drawSequence(e);
     });
     // stops drawing on event.
     element.on('mouseup', function(e) {
       isDraw = false;
+      prevX = null;
+      prevY = null;
       // $document.off('mousemove', mousemove);
       // $document.off('mouseup', mouseup);
     });
     // canvas methods that draw from point to point
-    function draw(prevX, prevY, currX, currY) {
+    function draw(xBitStart, yBitStart) {
       // this "moveTo, lineTo, stroke" logic is for drawing more intricate drawings, perhaps down
       // the line:
       // context.moveTo(prevX, prevY);
@@ -98,7 +123,7 @@ angular.module('okdoodle.draw', [])
       //TODO: refactor "fillStyle" to take variable color instead of absolute color
       context.fillStyle = "#000";
       // this starts a rectangle at the current X and Y, with a size of "pixelSize"
-      context.fillRect(currX, currY, pixelSize, pixelSize);
+      context.fillRect(xBitStart, yBitStart, pixelSize, pixelSize);
       // $scope.apply(); <-- except this line I dunno what it does
 
     }
