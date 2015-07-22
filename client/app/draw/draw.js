@@ -1,4 +1,3 @@
-
 // draw.js
 angular.module('okdoodle.draw', [])
 .controller('DrawController', function () {
@@ -36,7 +35,7 @@ angular.module('okdoodle.draw', [])
   // storing rect coords. It is absolutely dispensable.
   var storePic = {};
   // function that takes care of drawing on canvas
-  
+
   function doodle(scope, element, attrs) {
     // console.log(element);
     var context = element[0].getContext('2d');
@@ -52,7 +51,7 @@ angular.module('okdoodle.draw', [])
         currX = e.offsetX;
         currY = e.offsetY;
         // draw method
-        // we can't have people drawing rectangles any old place on the 
+        // we can't have people drawing rectangles any old place on the
         // canvas: the x and y coordinates need to be rounded to the nearest
         // bit corner
         xBitStart = Math.floor(currX/pixelSize) * pixelSize;
