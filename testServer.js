@@ -5,7 +5,7 @@ app.use(express.static('client'));
 
 var PORT = 3000;
 
-app.get('/profile', function (req, res) {
+app.get('/draw', function (req, res) {
 });
 
 module.exports = app;
