@@ -1,4 +1,3 @@
-
 // draw.js
 angular.module('okdoodle.draw', [])
 .controller('DrawController', function () {
@@ -15,6 +14,7 @@ angular.module('okdoodle.draw', [])
 
 
 .factory('DrawingService', function(){
+
   //TODO: this should contain drawing-specific elements that aren't used anywhere else.
   // should have a variable that points to the selected drawing in "UserProperties".
 
@@ -29,41 +29,57 @@ angular.module('okdoodle.draw', [])
 
 
 .directive('canvasDraw', ['$document', function($document) {
+  //TODO: consider moving pix variable elsewhere, DEFINITELY move storePic elsewhere
+  var pixelSize = 8;
+  // this is a temporary storage location to practice
+  // storing rect coords. It is absolutely dispensable.
+  var storePic = {};
   // function that takes care of drawing on canvas
+
   function doodle(scope, element, attrs) {
-    // variables for the canvas
-    var pixSize = 8;
+    // console.log(element);
+    var context = element[0].getContext('2d');
+    // true when mouse is down
+    var isDraw = false;
     // keep track of x and y
     var prevX;
     var prevY;
     var currX;
     var currY;
-
-    // console.log(element);
-    var context = element[0].getContext('2d');
-    // true when mouse is down
-    var isDraw = false;
-
+    function drawSequence(e) {
+      if(isDraw) {
+        currX = e.offsetX;
+        currY = e.offsetY;
+        // draw method
+        // we can't have people drawing rectangles any old place on the
+        // canvas: the x and y coordinates need to be rounded to the nearest
+        // bit corner
+        xBitStart = Math.floor(currX/pixelSize) * pixelSize;
+        yBitStart = Math.floor(currY/pixelSize) * pixelSize;
+        draw(prevX, prevY, xBitStart, yBitStart);
+        prevX = currX;
+        prevY = currY;
+      }
+    }
     element.on('mousedown', function(e) {
+      //The old logic is commented out: too space-intensive
+      // to integrate path drawings into a simple bitmap.
+      // It should NOT be deleted, because it could lead to another
+      // feature/implementation down the road
       prevX = e.offsetX;
       prevY = e.offsetY;
       // beginPath canvas method that allows us to draw based on a specific position.
-      context.beginPath();
+      //context.beginPath();
+
       // start drawing
       isDraw = true;
+      drawSequence(e);
       // $document.on('mousemove', mousemove);
       // $document.on('mouseup', mouseup);
     });
     element.on('mousemove', function(e) {
       // only begin drawing if mouse is down.
-      if(isDraw) {
-        currX = e.offsetX;
-        currY = e.offsetY;
-        // draw method
-        draw(prevX, prevY, currX, currY);
-        prevX = currX;
-        prevY = currY;
-      }
+      drawSequence(e);
     });
     // stops drawing on event.
     element.on('mouseup', function(e) {
@@ -73,12 +89,16 @@ angular.module('okdoodle.draw', [])
     });
     // canvas methods that draw from point to point
     function draw(prevX, prevY, currX, currY) {
-      context.moveTo(prevX, prevY);
-      context.lineTo(currX, currY);
-      // context.lineWidth = 10;
-      context.stroke();
-      // $scope.apply();
-      // context.stroke(parseInt(prevX)*pixSize, parseInt(prevY)*pixSize, pixSize, pixSize);
+      // this "moveTo, lineTo, stroke" logic is for drawing more intricate drawings, perhaps down
+      // the line:
+      // context.moveTo(prevX, prevY);
+      // context.lineTo(currX, currY);
+      // context.stroke();
+      //TODO: refactor "fillStyle" to take variable color instead of absolute color
+      context.fillStyle = "#000";
+      // this starts a rectangle at the current X and Y, with a size of "pixelSize"
+      context.fillRect(currX, currY, pixelSize, pixelSize);
+      // $scope.apply(); <-- except this line I dunno what it does
 
     }
   }
