@@ -5,7 +5,7 @@ var path = require('path');
 
 var app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());  
 
 var PORT = 3000;
@@ -43,9 +43,7 @@ app.post('/api/new', function (req, res) {
       email: req.body.email,
       password: req.body.password,
       age: req.body.age,
-      description: req.body.description,
-      profile_doodle: req.body.profile_doodle,
-      backup_doodle: req.body.backup_doodle
+      description: req.body.description
   })
   newUser.save(function (err, userObj) {
     if (err) {
@@ -59,23 +57,80 @@ app.post('/api/new', function (req, res) {
   })
 });
 
+
+// var updateDoodle = function (blah) {
+
+
+
+
+// }
+
+// var update_obj=
+// {
+//   username: 'bobbarker',
+//   updates: {email: 'new@email.com',
+//             age: 6,
+//             doodles: {0: {
+//                 deletions: { },
+//                 additions: { }
+
+//                         },
+//                       1: {
+//                       deletions: { },
+//                       additions: { }
+//                     } 
+//             }
+//           }
+// };
+
+
 app.post('/api/update', function (req, res) {
-  var update = req.body;
   console.log(req.body);
-  console.log("update: ", update);
+  //updates will contain all fields, including doogles, that we want to change
+  var updates = req.body.updates;
+  console.log("updates: ", updates);
+  // query is the criteria to find user we want to update
   var query = { username: req.body.username };
 
+  //find the actual user
   db.findOne(query, function (err, user) {
     if (err) {
       console.log(err);
     }
-    for (key in update) {
-      user[key] = update[key];
+    // store what is updated to be sent in a response message
+    var sendMsg = ['updated: '];
+    console.log("updates: ", updates);
+
+    for (var key in updates) {
 
 
+      // if key is not undefined, we want to change it
+      if (updates[key] !== undefined) {
+        if (key !== 'doodles') {
+          user[key] = updates[key];
+          console.log("key: ", key, updates[key]);
+          sendMsg.push(key); 
+        }
+        // handle doodles a bit differently...
+        else if (key === 'doodles') {
+          sendMsg.push('doodles');
+          // since we have multiple doodles...
+          for (var doogle in doodles) {
+            // first, handle deletions:
+            for (var key in doodle[deletions]) {
+              delete user.doodleArray[doodle][key];
+            }
+            for (var key in doodle[additions]) {
+              user.doodleArray[doodle][key] = doodle[additions][key];
+            }
+
+          }
+        }
+      }
     }
+    sendMsg = sendMsg.join(' ');
     console.log(user);
-    res.send("updated");
+    res.send(user, sendMsg);
     user.save(function (err, user) {
       if (err) {
         console.log(err);
@@ -117,15 +172,17 @@ app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
   db.find({
-          username: username,
-          password: password
+          username: username
           }, 
     function (err, user) {
       if (err) {
         console.log(err);
       }
-      else if (user === null || user === undefined) {
-        res.send("User doesn't exist");
+      else if (Object.keys(user).length === 0) {
+        res.send("User doesn't exist!");
+      }
+      else if (user.password !== password) {
+        res.send("Password is incorrect!")
       }
       else {
         res.json(user);
@@ -175,8 +232,6 @@ var findAllUsers = function () {
       console.log(docs[i]);
     }
   }
-
-
 
 )};
 findAllUsers();
