@@ -1,7 +1,9 @@
 // draw.js
 angular.module('okdoodle.draw', [])
-.controller('DrawController', function () {
+.controller('DrawController', function ($http) {
+  this.test = "ayylmao";
 
+  
   //THIS IS REPLACEABLE.
   // need an Alias for the canvas element, and unfortunately
   //might need to use angular's jqlite in lieu of true two-way data binding.
@@ -14,7 +16,6 @@ angular.module('okdoodle.draw', [])
 
 
 .factory('DrawingService', function(){
-
   //TODO: this should contain drawing-specific elements that aren't used anywhere else.
   // should have a variable that points to the selected drawing in "UserProperties".
 
@@ -30,13 +31,17 @@ angular.module('okdoodle.draw', [])
 
 .directive('canvasDraw', ['$document', function($document) {
   //TODO: consider moving pix variable elsewhere, DEFINITELY move storePic elsewhere
-  var pixelSize = 8;
+
   // this is a temporary storage location to practice
   // storing rect coords. It is absolutely dispensable.
-  var storePic = {};
+
   // function that takes care of drawing on canvas
 
   function doodle(scope, element, attrs) {
+    var pixelSize = 16;
+    var storePic = {};
+    var changes = {};
+    var deletes = {};
     // console.log(element);
     var context = element[0].getContext('2d');
     // true when mouse is down
@@ -48,6 +53,7 @@ angular.module('okdoodle.draw', [])
     var currY;
     var xBitStart;
     var yBitStart;
+    console.log(scope);
 
     //this function stores coordinates in the temp object. the temp object should be moved at some point,
     // but it still makes sense to update a drawing in local memory before sending it off to firebase
@@ -59,7 +65,8 @@ angular.module('okdoodle.draw', [])
         return;
       }
       storePic[key] = color;
-      console.log(storePic);
+    //  console.log(storePic);
+
     }
     function drawSequence(e) {
       if(isDraw) {
