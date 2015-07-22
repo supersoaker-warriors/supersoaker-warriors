@@ -70,7 +70,9 @@ app.post('/api/update', function (req, res) {
       console.log(err);
     }
     for (key in update) {
-      user[key] = update[key];
+      if (update[key] !== undefined) {
+        user[key] = update[key];
+      }
 
 
     }
