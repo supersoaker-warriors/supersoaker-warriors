@@ -3,7 +3,9 @@
 <span>{{profile.selected}}</span>
   <div id="canvasHolder">
      <!-- <span my-draggable>Drag ME</span> -->
-    <canvas canvas-draw id='drawing' width='500' height='500'></canvas>
+     <!-- NOTE: if using bitwise, canvas size should be divisible by pixel size -->
+     <!-- ALSO: keep an eye on canvasHolder size if deciding to change sizing -->
+    <canvas canvas-draw id='drawing' width='504' height='504'></canvas>
   </div>
 </div>
 
