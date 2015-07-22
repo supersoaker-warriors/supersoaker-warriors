@@ -1,0 +1,8 @@
+/*styles */
+/* TODO: refactor using an appropriate Bootstrap element */
+#canvasHolder {
+  border: 10px solid black;
+  /* the fixed height and width could be a problem later if we change canvas size */
+  height: 520px;
+  width: 520px;
+}
