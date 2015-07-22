@@ -115,17 +115,25 @@ app.post('/api/update', function (req, res) {
         else if (key === 'doodles') {
           sendMsg.push('doodles');
           // since we have multiple doodles...
-          for (var doogle in doodles) {
+          for (var doodle in updates[key]) {
+            console.log("updates[key][doodle] ", updates[key][doodle]);
             // first, handle deletions:
-            for (var key in doodle[deletions]) {
-              delete user.doodleArray[doodle][key];
+            if ("deletions" in updates[key][doodle]) {
+              sendMsg.push("---deletions---");
+              for (var loc in updates[key][doodle]["deletions"]) {
+                delete user.doodleArray[doodle][loc];
+              }              
             }
-            for (var key in doodle[additions]) {
-              user.doodleArray[doodle][key] = doodle[additions][key];
+            // then handle additions
+            if ("additions" in updates[key][doodle]) {
+              sendMsg.push("---additions---");
+              for (var loc in updates[key][doodle]["additions"]) {
+                console.log("!!! loc HERE", loc);
+                user.doodleArray[doodle][loc] = updates[key][doodle]["additions"][loc];
+              }              
             }
-
           }
-        }
+        } //that's a lot of curly braces, isn't it?
       }
     }
     sendMsg = sendMsg.join(' ');
