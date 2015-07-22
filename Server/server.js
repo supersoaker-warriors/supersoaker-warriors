@@ -6,7 +6,7 @@ var path = require('path');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json());  
+app.use(bodyParser.json());
 
 var PORT = 3000;
 
@@ -78,7 +78,7 @@ app.post('/api/new', function (req, res) {
 //                       1: {
 //                       deletions: { },
 //                       additions: { }
-//                     } 
+//                     }
 //             }
 //           }
 // };
@@ -109,7 +109,7 @@ app.post('/api/update', function (req, res) {
         if (key !== 'doodles') {
           user[key] = updates[key];
           console.log("key: ", key, updates[key]);
-          sendMsg.push(key); 
+          sendMsg.push(key);
         }
         // handle doodles a bit differently...
         else if (key === 'doodles') {
@@ -150,7 +150,7 @@ app.post('/api/update', function (req, res) {
 });
 
 
-  // var update = {    
+  // var update = {
   //     first: req.body.first,
   //     last: req.body.last
   //     // email: req.body.email,
@@ -181,7 +181,7 @@ app.post('/api/login', function (req, res) {
   var password = req.body.password;
   db.find({
           username: username
-          }, 
+          },
     function (err, user) {
       if (err) {
         console.log(err);
@@ -213,7 +213,7 @@ var server = app.listen(PORT, function () {
 
 // var saveUser = function () {
 //   console.log("saveUser called");
-//   var user2 = new db({username: 'lisasimpson', 
+//   var user2 = new db({username: 'lisasimpson',
 //                       first: 'Lisa',
 //                       last: 'Simpson'
 //                     });
