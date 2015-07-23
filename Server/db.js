@@ -20,7 +20,7 @@ var UserSchema = new Schema ({
   password: {type: String, required: true },
   age: Number,
   description: String,
-  doodleArray: {type: Array, default: [{}, {}]},
+  doodleArray: Array,
   date: {type: Date, default: Date.now }
 
 });
