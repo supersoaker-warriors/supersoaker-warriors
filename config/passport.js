@@ -25,7 +25,7 @@
 
 // 	passport.use('local-signup', new localStrategy({
 // 		usernameField: 'username',
-// 		passwordField: 'password', 
+// 		passwordField: 'password',
 // 		passReqToCallback: true
 // 	}
 // 	function(req, username, password, done){
@@ -55,8 +55,8 @@
 // 	//Local Login Strategy
 
 // 	passport.use('local-login', new localStrategy({
-// 		usernameField: "username", 
-// 		passwordField: 'password', 
+// 		usernameField: "username",
+// 		passwordField: 'password',
 // 		passReqToCallback: true
 // 	}
 // 	function(req, username, password, done){
@@ -68,11 +68,11 @@
 // 				if (!user){
 // 					return done(null, false, {message: 'username does not exist!'};)
 // 				}
-				
+
 // 				if(!user.validPassword(password)){
 // 					return done(null, false, {message: 'Wrong Password'})
 // 				}
-				
+
 // 				return done(null, user);
 // 			});
 // 		});
