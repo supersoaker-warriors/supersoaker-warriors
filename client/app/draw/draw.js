@@ -5,6 +5,17 @@ angular.module('okdoodle.draw', [])
   this.storePic = {};
   this.changes = {};
   this.deletions = {};
+  this.colors = {"Red": "#F00",
+                "Orange": "#F60",
+                "Yellow": "#FF0",
+                "Green": "#0F0",
+                "Blue": "#00F",
+                "Pink": "#F0F",
+                "Purple": "#90F",
+                "Black": "#000"};
+  this.setColor = function(color) {
+    this.settings.color = color;
+  };
   this.save = function(){
     console.log("saving...");
     //call factory method, sending changes to factory
@@ -24,7 +35,7 @@ angular.module('okdoodle.draw', [])
   // })
   // .error(function() {
   //   console.log('error with get request for draw');
-  // }); 
+  // });
   //THIS IS REPLACEABLE.
   // need an Alias for the canvas element, and unfortunately
   //might need to use angular's jqlite in lieu of true two-way data binding.
