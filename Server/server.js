@@ -186,6 +186,8 @@ app.post('/api/login', function (req, res) {
           username: username
           }, 
     function (err, user) {
+      console.log("user", user);
+      console.log("password ", password, user.password);
       if (err) {
         console.log(err);
       }
