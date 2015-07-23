@@ -1,6 +1,5 @@
 //app.js
 angular.module('okdoodle', [
-
   'okdoodle.profile',
   'okdoodle.draw',
   'okdoodle.signin',
@@ -30,5 +29,4 @@ angular.module('okdoodle', [
       templateUrl: './app/draw/draw.html',
       controller: 'DrawController as draw'
     });
-
 });

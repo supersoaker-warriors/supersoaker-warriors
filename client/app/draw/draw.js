@@ -1,47 +1,41 @@
 // draw.js
 angular.module('okdoodle.draw', [])
 .controller('DrawController', function ($http) {
-  this.test = "ayylmao";
-
-  
+  this.color = "000";
+  this.storePic = {};
+  this.changes = {};
+  this.deletions = {};
+  // $http.get('/api/')
+  // .success(function(data) {
+  //   this.storePic = JSON.parse(data);
+  // })
+  // .error(function() {
+  //   console.log('error with get request for draw');
+  // }); 
   //THIS IS REPLACEABLE.
   // need an Alias for the canvas element, and unfortunately
   //might need to use angular's jqlite in lieu of true two-way data binding.
   // other options: maybe store each
   //this.currentCanvas = angular.element(??)
-
   // use scope.$watch for changes in any options (e.g. color, width);
-  //
 })
-
-
 .factory('DrawingService', function(){
   //TODO: this should contain drawing-specific elements that aren't used anywhere else.
   // should have a variable that points to the selected drawing in "UserProperties".
-
   // The object containing x/y coordinates shouldn't be stored here. that should be stored in userService
   // (or elsewhere, or) in app.js or profile.js. Why? that object needs to be referenced both in the "draw" view and in the
   // "profile" view (as a smaller thumbnail).
   // We should also call methods from a dedicated factory for routing here: making POST requests on saves, for instance.
 })
-
-
 // methods to look into addEventListener
-
-
 .directive('canvasDraw', ['$document', function($document) {
   //TODO: consider moving pix variable elsewhere, DEFINITELY move storePic elsewhere
-
   // this is a temporary storage location to practice
   // storing rect coords. It is absolutely dispensable.
-
   // function that takes care of drawing on canvas
-
   function doodle(scope, element, attrs) {
+    var color = scope.draw.color;
     var pixelSize = 16;
-    var storePic = {};
-    var changes = {};
-    var deletes = {};
     // console.log(element);
     var context = element[0].getContext('2d');
     // true when mouse is down
@@ -53,20 +47,35 @@ angular.module('okdoodle.draw', [])
     var currY;
     var xBitStart;
     var yBitStart;
-    console.log(scope);
-
+    //note: this might be an ugly way to do this,
+    // and this WILL cause problems in the great "scope draw" transition
+    var changes = scope.draw.changes;
+    var deletions = scope.draw.deletions;
     //this function stores coordinates in the temp object. the temp object should be moved at some point,
     // but it still makes sense to update a drawing in local memory before sending it off to firebase
     // so we can implement saves and undos
     function update(xCoord, yCoord, color) {
       var key = "[" + xCoord + "," + yCoord + "]";
-      var existing = storePic[key];
-      if(existing){
+      var existing;
+      if(color.toUpperCase === "FFF"){
+        if(deletions[key]){
+          return;
+        }
+        deletions[key]=true;
+        if(changes[key]){
+          delete changes[key];
+        }
         return;
       }
-      storePic[key] = color;
-    //  console.log(storePic);
-
+      if(changes[key]===color){
+        console.log("already called :O");
+        return;
+      }
+      if(deletions[key]){
+        delete deletions[key];
+      }
+      changes[key] = color;
+      console.log("added Change!");
     }
     function drawSequence(e) {
       if(isDraw) {
@@ -82,9 +91,9 @@ angular.module('okdoodle.draw', [])
         xBitStart = xCoord * pixelSize;
         yBitStart = yCoord * pixelSize;
         if(!((xCoord === prevX) && (yCoord === prevY))){
-          draw(xBitStart, yBitStart);
+          draw(xBitStart, yBitStart, color);
           //third argument should be color variable (hardcoded for now)
-          update(xCoord, yCoord, "000");
+          update(xCoord, yCoord, color);
         }
         prevX = xCoord;
         prevY = yCoord;
@@ -99,7 +108,6 @@ angular.module('okdoodle.draw', [])
       prevY = e.offsetY;
       // beginPath canvas method that allows us to draw based on a specific position.
       //context.beginPath();
-
       // start drawing
       isDraw = true;
       drawSequence(e);
@@ -120,18 +128,17 @@ angular.module('okdoodle.draw', [])
       // $document.off('mouseup', mouseup);
     });
     // canvas methods that draw from point to point
-    function draw(xBitStart, yBitStart) {
+    function draw(xBitStart, yBitStart, color) {
       // this "moveTo, lineTo, stroke" logic is for drawing more intricate drawings, perhaps down
       // the line:
       // context.moveTo(prevX, prevY);
       // context.lineTo(currX, currY);
       // context.stroke();
       //TODO: refactor "fillStyle" to take variable color instead of absolute color
-      context.fillStyle = "#000";
+      context.fillStyle = color;
       // this starts a rectangle at the current X and Y, with a size of "pixelSize"
       context.fillRect(xBitStart, yBitStart, pixelSize, pixelSize);
       // $scope.apply(); <-- except this line I dunno what it does
-
     }
   }
   return {
