@@ -65,7 +65,7 @@ angular.module('okdoodle.draw', [])
   // function that takes care of drawing on canvas
   function doodle(scope, element, attrs) {
     var color = scope.draw.settings;
-    var pixelSize = 64;
+    var pixelSize = 16;
     var storePic = {};
 
     // console.log(element);
