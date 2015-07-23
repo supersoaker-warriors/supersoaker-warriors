@@ -6,7 +6,7 @@ var path = require('path');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json());  
+app.use(bodyParser.json());
 
 var PORT = 3000;
 
@@ -28,7 +28,7 @@ var PORT = 3000;
 
 app.get('/', function (req, res) {
   console.log(__dirname);
-  res.sendFile(path.resolve(__dirname + '/../Public/index.html'));
+  res.sendFile(path.resolve(__dirname + '/../app/auth/signin.html'));
 });
 
 
@@ -78,7 +78,7 @@ app.post('/api/new', function (req, res) {
 //                       1: {
 //                       deletions: { },
 //                       additions: { }
-//                     } 
+//                     }
 //             }
 //           }
 // };
@@ -109,7 +109,7 @@ app.post('/api/update', function (req, res) {
         if (key !== 'doodles') {
           user[key] = updates[key];
           console.log("key: ", key, updates[key]);
-          sendMsg.push(key); 
+          sendMsg.push(key);
         }
         // handle doodles a bit differently...
         else if (key === 'doodles') {
@@ -122,7 +122,7 @@ app.post('/api/update', function (req, res) {
               sendMsg.push("---deletions---");
               for (var loc in updates[key][doodle]["deletions"]) {
                 delete user.doodleArray[doodle][loc];
-              }              
+              }
             }
             // then handle additions
             if ("additions" in updates[key][doodle]) {
@@ -130,7 +130,7 @@ app.post('/api/update', function (req, res) {
               for (var loc in updates[key][doodle]["additions"]) {
                 console.log("!!! loc HERE", loc);
                 user.doodleArray[doodle][loc] = updates[key][doodle]["additions"][loc];
-              }              
+              }
             }
           }
         } //that's a lot of curly braces, isn't it?
@@ -150,7 +150,7 @@ app.post('/api/update', function (req, res) {
 });
 
 
-  // var update = {    
+  // var update = {
   //     first: req.body.first,
   //     last: req.body.last
   //     // email: req.body.email,
@@ -181,7 +181,7 @@ app.post('/api/login', function (req, res) {
   var password = req.body.password;
   db.find({
           username: username
-          }, 
+          },
     function (err, user) {
       if (err) {
         console.log(err);
@@ -198,7 +198,7 @@ app.post('/api/login', function (req, res) {
     })
 })
 
-app.use(express.static(__dirname+ '/../Public'));
+app.use(express.static(__dirname+ '/../client'));
 
 var server = app.listen(PORT, function () {
   var host = server.address().address;
@@ -213,7 +213,7 @@ var server = app.listen(PORT, function () {
 
 // var saveUser = function () {
 //   console.log("saveUser called");
-//   var user2 = new db({username: 'lisasimpson', 
+//   var user2 = new db({username: 'lisasimpson',
 //                       first: 'Lisa',
 //                       last: 'Simpson'
 //                     });
