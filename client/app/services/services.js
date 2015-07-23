@@ -10,13 +10,19 @@ angular.module('okdoodle', [])
 
   return {
     // on signin i want to get
-    get: function() {
-      return $http.get('/api/new')//api user info
-    },
+    // get: function() {
+    //   return $http.get('/api/login')//api user info
+    // },
 
-    post: function() { //data
-      return $http.post()// api, data
+    post: function(data) { //data
+      return $http({
+        method: 'POST',
+        url: '/api/login'
+        data: {username: this.username,
+          password: this.password
+        }
     }
+
 
   }
 

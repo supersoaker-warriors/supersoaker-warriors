@@ -28,7 +28,7 @@ var PORT = 3000;
 
 app.get('/', function (req, res) {
   console.log(__dirname);
-  res.sendFile(path.resolve(__dirname + '/../Public/index.html'));
+  res.sendFile(path.resolve(__dirname + '/../app/auth/signin.html'));
 });
 
 
@@ -122,7 +122,7 @@ app.post('/api/update', function (req, res) {
               sendMsg.push("---deletions---");
               for (var loc in updates[key][doodle]["deletions"]) {
                 delete user.doodleArray[doodle][loc];
-              }              
+              }
             }
             // then handle additions
             if ("additions" in updates[key][doodle]) {
@@ -130,7 +130,7 @@ app.post('/api/update', function (req, res) {
               for (var loc in updates[key][doodle]["additions"]) {
                 console.log("!!! loc HERE", loc);
                 user.doodleArray[doodle][loc] = updates[key][doodle]["additions"][loc];
-              }              
+              }
             }
           }
         } //that's a lot of curly braces, isn't it?
@@ -198,7 +198,7 @@ app.post('/api/login', function (req, res) {
     })
 })
 
-app.use(express.static(__dirname+ '/../Public'));
+app.use(express.static(__dirname+ '/../client'));
 
 var server = app.listen(PORT, function () {
   var host = server.address().address;
