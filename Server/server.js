@@ -5,8 +5,8 @@ var path = require('path');
 
 var app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json());  
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(express.static('client'));
 
@@ -31,7 +31,7 @@ app.post('/api/new', function (req, res) {
       password: req.body.password,
       age: req.body.age,
       description: req.body.description
-  })
+  });
   newUser.save(function (err, userObj) {
     if (err) {
       console.log("error creating user: ", err);
@@ -41,7 +41,7 @@ app.post('/api/new', function (req, res) {
       console.log('user saved successfully: ', userObj);
     }
 
-  })
+  });
 });
 
 
@@ -58,7 +58,7 @@ app.post('/api/new', function (req, res) {
 //                       1: {
 //                       deletions: { },
 //                       additions: { }
-//                     } 
+//                     }
 //             }
 //           }
 // };
@@ -89,7 +89,7 @@ app.post('/api/update', function (req, res) {
         if (key !== 'doodles') {
           user[key] = updates[key];
           console.log("key: ", key, updates[key]);
-          sendMsg.push(key); 
+          sendMsg.push(key);
         }
         // handle doodles a bit differently...
         else if (key === 'doodles') {
@@ -102,7 +102,7 @@ app.post('/api/update', function (req, res) {
               sendMsg.push("---deletions---");
               for (var loc in updates[key][doodle]["deletions"]) {
                 delete user.doodleArray[doodle][loc];
-              }              
+              }
             }
             // then handle additions
             if ("additions" in updates[key][doodle]) {
@@ -110,7 +110,7 @@ app.post('/api/update', function (req, res) {
               for (var loc in updates[key][doodle]["additions"]) {
                 console.log("!!! loc HERE", loc);
                 user.doodleArray[doodle][loc] = updates[key][doodle]["additions"][loc];
-              }              
+              }
             }
           }
         } //that's a lot of curly braces, isn't it?
@@ -124,13 +124,13 @@ app.post('/api/update', function (req, res) {
         console.log(err);
       }
       console.log('saved successfully!!!!:', user);
-    })
+    });
 
-   })
+   });
 });
 
 
-  // var update = {    
+  // var update = {
   //     first: req.body.first,
   //     last: req.body.last
   //     // email: req.body.email,
@@ -162,7 +162,7 @@ app.post('/api/login', function (req, res) {
   console.log("called!");
   db.findOne({
           username: username
-          }, 
+          },
     function (err, user) {
       console.log("user", user);
       console.log("password ", password, user.password);
@@ -173,13 +173,13 @@ app.post('/api/login', function (req, res) {
         res.send("User doesn't exist!");
       }
       else if (user.password !== password) {
-        res.send("Password is incorrect!")
+        res.send("Password is incorrect!");
       }
       else {
-        console.log(user);
+        res.send(user);
       }
-    })
-})
+    });
+});
 
 
 
@@ -196,7 +196,7 @@ var server = app.listen(PORT, function () {
 
 // var saveUser = function () {
 //   console.log("saveUser called");
-//   var user2 = new db({username: 'lisasimpson', 
+//   var user2 = new db({username: 'lisasimpson',
 //                       first: 'Lisa',
 //                       last: 'Simpson'
 //                     });
@@ -222,9 +222,8 @@ var findAllUsers = function () {
     for (var i = 0; i < docs.length; i++ ) {
       console.log(docs[i]);
     }
-  }
-
-)};
+  });
+};
 findAllUsers();
 
 
