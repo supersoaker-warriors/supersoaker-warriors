@@ -1,6 +1,6 @@
 // draw.js
 angular.module('okdoodle.draw', [])
-.controller('DrawController', function ($http, 'UserService') {
+.controller('DrawController', function ($http, UserService) {
   this.settings = {"color": "000"};
   this.colors = {"Red": "F00", 
                  "Orange": "F60",
