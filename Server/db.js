@@ -30,7 +30,7 @@ var User = mongoose.model('User', UserSchema);
 
 
 // create an example (user1) - instance of a user
-// var user1 = new User({username: 'bobbarker', 
+// var user1 = new User({username: 'bobbarker',
 //                       first: 'bob',
 //                       last: 'barker'
 //                     });

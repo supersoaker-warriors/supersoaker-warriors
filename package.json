@@ -18,10 +18,12 @@
   "homepage": "https://github.com/pbbyeung/supersoaker-warriors#readme",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.13.2",
     "express": "^4.13.1",
     "express-session": "^1.11.3",
     "firebase": "~2.2.7",
     "mongoose": "~4.0.7",
-    "body-parser": "~1.13.2"
+    "passport": "^0.2.2",
+    "passport-local": "^1.0.0"
   }
 }

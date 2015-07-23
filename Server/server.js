@@ -57,7 +57,7 @@ app.post('/api/new', function (req, res) {
 
 //                         },
 //                       1: {
-//                       all: "false",  
+//                       all: "false",
 //                       deletions: { },
 //                       additions: { }
 //                     }
