@@ -33,12 +33,12 @@ angular.module('okdoodle.draw', [])
   // this is a temporary storage location to practice
   // storing rect coords. It is absolutely dispensable.
 
-
   // function that takes care of drawing on canvas
   function doodle(scope, element, attrs) {
     var color = scope.draw.color;
     var pixelSize = 16;
     var storePic = {};
+
     // console.log(element);
     var context = element[0].getContext('2d');
     // true when mouse is down
