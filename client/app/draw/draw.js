@@ -1,10 +1,23 @@
 // draw.js
 angular.module('okdoodle.draw', [])
 .controller('DrawController', function ($http) {
-  this.color = "000";
+  this.settings = {"color": "000"};
   this.storePic = {};
   this.changes = {};
   this.deletions = {};
+  this.save = function(){
+    console.log("saving...");
+    //call factory method, sending changes to factory
+    //I'll be able to send: changes, deletions
+    //I'll need you to get: username
+  }
+  this.blue = function(){
+    this.settings.color = "00F";
+  }
+  this.eraser = function(){
+    this.settings.color = "FFF";
+  }
+
   // $http.get('/api/')
   // .success(function(data) {
   //   this.storePic = JSON.parse(data);
@@ -35,7 +48,7 @@ angular.module('okdoodle.draw', [])
 
   // function that takes care of drawing on canvas
   function doodle(scope, element, attrs) {
-    var color = scope.draw.color;
+    var color = scope.draw.settings;
     var pixelSize = 16;
     var storePic = {};
 
@@ -60,7 +73,8 @@ angular.module('okdoodle.draw', [])
     function update(xCoord, yCoord, color) {
       var key = "[" + xCoord + "," + yCoord + "]";
       var existing;
-      if(color.toUpperCase === "FFF"){
+      console.log("color: ",color)
+      if(color === "FFF"){
         if(deletions[key]){
           return;
         }
@@ -71,19 +85,18 @@ angular.module('okdoodle.draw', [])
         return;
       }
       if(changes[key]===color){
-        console.log("already called :O");
         return;
       }
       if(deletions[key]){
         delete deletions[key];
       }
       changes[key] = color;
-      console.log("added Change!");
       storePic[key] = color;
 
     }
     function drawSequence(e) {
       if(isDraw) {
+        console.log(color.color);
         currX = e.offsetX;
         currY = e.offsetY;
         // draw method
@@ -96,9 +109,9 @@ angular.module('okdoodle.draw', [])
         xBitStart = xCoord * pixelSize;
         yBitStart = yCoord * pixelSize;
         if(!((xCoord === prevX) && (yCoord === prevY))){
-          draw(xBitStart, yBitStart, color);
+          draw(xBitStart, yBitStart, color.color);
           //third argument should be color variable (hardcoded for now)
-          update(xCoord, yCoord, color);
+          update(xCoord, yCoord, color.color);
         }
         prevX = xCoord;
         prevY = yCoord;
@@ -133,14 +146,15 @@ angular.module('okdoodle.draw', [])
       // $document.off('mouseup', mouseup);
     });
     // canvas methods that draw from point to point
-    function draw(xBitStart, yBitStart, color) {
+    function draw(xBitStart, yBitStart, shade) {
       // this "moveTo, lineTo, stroke" logic is for drawing more intricate drawings, perhaps down
       // the line:
       // context.moveTo(prevX, prevY);
       // context.lineTo(currX, currY);
       // context.stroke();
       //TODO: refactor "fillStyle" to take variable color instead of absolute color
-      context.fillStyle = color;
+      context.fillStyle = "#" + shade;
+      console.log(shade);
       // this starts a rectangle at the current X and Y, with a size of "pixelSize"
       context.fillRect(xBitStart, yBitStart, pixelSize, pixelSize);
       // $scope.apply(); <-- except this line I dunno what it does
