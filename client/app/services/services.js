@@ -41,7 +41,7 @@ angular.module('okdoodle.services', [])
       console.log('postchanging');
       return $http({
         method: 'POST',
-        url: '/api/new',
+        url: '/api/update',
         data: JSON.stringify(
         {
           username: userObj.username,
