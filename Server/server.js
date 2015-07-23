@@ -130,32 +130,6 @@ app.post('/api/update', function (req, res) {
 });
 
 
-  // var update = {
-  //     first: req.body.first,
-  //     last: req.body.last
-  //     // email: req.body.email,
-  //     // password: req.body.password,
-  //     // age: req.body.age,
-  //     // description: req.body.description,
-  //     // profile_doodle: req.body.profile_doodle,
-  //     // backup_doodle: req.body.backup_doodle
-  //   }
-
-  //   //pull data from database of username
-  //   //loop through the keys of that data
-
-  // db.findOneAndUpdate(query, update, {new: true }, function (err, user) {
-  //     if (err) {
-  //       console.log("error updating record: ", err);
-  //       return res.send(500, { error: err });
-  //     }
-  //     else {
-  //       return res.send("succesfully saved");
-  //     }
-
-  //   })
-  // });
-
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
