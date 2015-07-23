@@ -13,21 +13,6 @@ app.use(express.static('client'));
 module.exports = app;
 var PORT = 3000;
 
-// var UserSchema = new Schema ({
-//   id: ObjectId,
-//   username: String,
-//   first: String,
-//   last: String,
-//   email: String,
-//   password: String,
-//   age: Number,
-//   description: String ,
-//   profile_doodle: Object,
-//   backup_doodle: Object,
-//   date: Date
-
-
-// });
 
 app.get('/', function (req, res) {
   console.log(__dirname);
@@ -59,13 +44,6 @@ app.post('/api/new', function (req, res) {
   })
 });
 
-
-// var updateDoodle = function (blah) {
-
-
-
-
-// }
 
 // var update_obj=
 // {
