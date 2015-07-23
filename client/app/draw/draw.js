@@ -2,20 +2,21 @@
 angular.module('okdoodle.draw', [])
 .controller('DrawController', function ($http) {
   this.settings = {"color": "000"};
+  this.colors = {"Red": "F00", 
+                 "Orange": "F60",
+                 "Yellow": "FF0",
+                 "Green": "0F0",
+                 "Blue": "00F",
+                 "Pink": "F0F",
+                 "Purple": "90F",
+                 "Black": "000"};
   this.storePic = {};
   this.changes = {};
   this.deletions = {};
-  this.colors = {"Red": "#F00",
-                "Orange": "#F60",
-                "Yellow": "#FF0",
-                "Green": "#0F0",
-                "Blue": "#00F",
-                "Pink": "#F0F",
-                "Purple": "#90F",
-                "Black": "#000"};
   this.setColor = function(color) {
     this.settings.color = color;
   };
+  this.deletions = {"all": false};
   this.save = function(){
     console.log("saving...");
     //call factory method, sending changes to factory
@@ -27,6 +28,10 @@ angular.module('okdoodle.draw', [])
   }
   this.eraser = function(){
     this.settings.color = "FFF";
+  }
+  this.clear = function(){
+    this.deletions["all"] = true;
+    this.changes = {};
   }
 
   // $http.get('/api/')
@@ -60,7 +65,7 @@ angular.module('okdoodle.draw', [])
   // function that takes care of drawing on canvas
   function doodle(scope, element, attrs) {
     var color = scope.draw.settings;
-    var pixelSize = 16;
+    var pixelSize = 64;
     var storePic = {};
 
     // console.log(element);
@@ -100,14 +105,15 @@ angular.module('okdoodle.draw', [])
       }
       if(deletions[key]){
         delete deletions[key];
+        delete deletions[all];
       }
       changes[key] = color;
       storePic[key] = color;
-
+      console.log("changes: ", scope.draw.changes);
+      console.log("deletions: ", scope.draw.deletions);
     }
     function drawSequence(e) {
       if(isDraw) {
-        console.log(color.color);
         currX = e.offsetX;
         currY = e.offsetY;
         // draw method
@@ -165,7 +171,6 @@ angular.module('okdoodle.draw', [])
       // context.stroke();
       //TODO: refactor "fillStyle" to take variable color instead of absolute color
       context.fillStyle = "#" + shade;
-      console.log(shade);
       // this starts a rectangle at the current X and Y, with a size of "pixelSize"
       context.fillRect(xBitStart, yBitStart, pixelSize, pixelSize);
       // $scope.apply(); <-- except this line I dunno what it does
