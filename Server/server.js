@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(express.static('client'));
 
 module.exports = app;
-var PORT = 3000;
+var PORT = 80;
 
 
 app.get('/', function (req, res) {
