@@ -8,6 +8,10 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
 
+app.use(express.static('client'));
+
+
+module.exports = app;
 var PORT = 3000;
 
 // var UserSchema = new Schema ({
@@ -28,7 +32,7 @@ var PORT = 3000;
 
 app.get('/', function (req, res) {
   console.log(__dirname);
-  res.sendFile(path.resolve(__dirname + '/../app/auth/signin.html'));
+  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
 
@@ -179,6 +183,7 @@ app.post('/api/update', function (req, res) {
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
+  console.log("called!");
   db.find({
           username: username
           },
@@ -187,7 +192,7 @@ app.post('/api/login', function (req, res) {
         console.log(err);
       }
       else if (Object.keys(user).length === 0) {
-        res.send("User doesn't exist!");
+        res.send("User "+ username + " doesn't exist!");
       }
       else if (user.password !== password) {
         res.send("Password is incorrect!")
@@ -198,7 +203,6 @@ app.post('/api/login', function (req, res) {
     })
 })
 
-app.use(express.static(__dirname+ '/../client'));
 
 var server = app.listen(PORT, function () {
   var host = server.address().address;
