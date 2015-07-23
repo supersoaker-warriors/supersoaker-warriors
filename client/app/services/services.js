@@ -56,7 +56,6 @@ angular.module('okdoodle', [])
 //angular
 // .module('okdoodle') again.
 .factory('AjaxService', function ($http){
-
    //this is to handle any GET and POST requests
    // this will also handle the firebase update logic (which are simplified "get" and "posts")
 })
