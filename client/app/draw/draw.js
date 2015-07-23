@@ -1,6 +1,6 @@
 // draw.js
 angular.module('okdoodle.draw', [])
-.controller('DrawController', function ($http) {
+.controller('DrawController', function ($http, 'UserService') {
   this.settings = {"color": "000"};
   this.colors = {"Red": "F00", 
                  "Orange": "F60",
@@ -9,7 +9,8 @@ angular.module('okdoodle.draw', [])
                  "Blue": "00F",
                  "Pink": "F0F",
                  "Purple": "90F",
-                 "Black": "000"};
+                 "Black": "000",
+                 "White": "FFF"};
   this.storePic = {};
   this.changes = {};
   this.deletions = {};
@@ -19,20 +20,17 @@ angular.module('okdoodle.draw', [])
   this.deletions = {"all": false};
   this.save = function(){
     console.log("saving...");
-    //call factory method, sending changes to factory
-    //I'll be able to send: changes, deletions
-    //I'll need you to get: username
+    UserService.postChange({0:{changes: this.changes,
+                            deletions: this.deletions}
+                          });
   }
   this.blue = function(){
     this.settings.color = "00F";
-  }
-  this.eraser = function(){
-    this.settings.color = "FFF";
-  }
+  };
   this.clear = function(){
-    this.deletions["all"] = true;
+    this.deletions= {"all": true};
     this.changes = {};
-  }
+  };
 
   // $http.get('/api/')
   // .success(function(data) {
@@ -90,22 +88,33 @@ angular.module('okdoodle.draw', [])
       var key = "[" + xCoord + "," + yCoord + "]";
       var existing;
       console.log("color: ",color)
+      //checking if we are in "ERASE" mode
       if(color === "FFF"){
+        console.log("in deletions!");
+        //was there already a deletion at this point?
         if(deletions[key]){
+          console.log("already deleted!");
+          console.log("changes: ", scope.draw.changes);
+          console.log("deletions: ", scope.draw.deletions);
           return;
         }
+        //add a deletion
         deletions[key]=true;
+        //was there a change that needs to be deleted?
         if(changes[key]){
           delete changes[key];
+          console.log("deleted change");
+          console.log("changes: ", scope.draw.changes);
+          console.log("deletions: ", scope.draw.deletions);
         }
         return;
       }
       if(changes[key]===color){
         return;
       }
-      if(deletions[key]){
+      if(scope.draw.deletions[key]){
         delete deletions[key];
-        delete deletions[all];
+        deletions[all]=false;
       }
       changes[key] = color;
       storePic[key] = color;
@@ -164,16 +173,9 @@ angular.module('okdoodle.draw', [])
     });
     // canvas methods that draw from point to point
     function draw(xBitStart, yBitStart, shade) {
-      // this "moveTo, lineTo, stroke" logic is for drawing more intricate drawings, perhaps down
-      // the line:
-      // context.moveTo(prevX, prevY);
-      // context.lineTo(currX, currY);
-      // context.stroke();
-      //TODO: refactor "fillStyle" to take variable color instead of absolute color
       context.fillStyle = "#" + shade;
       // this starts a rectangle at the current X and Y, with a size of "pixelSize"
       context.fillRect(xBitStart, yBitStart, pixelSize, pixelSize);
-      // $scope.apply(); <-- except this line I dunno what it does
     }
   }
   return {
