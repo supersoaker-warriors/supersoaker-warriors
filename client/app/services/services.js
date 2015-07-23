@@ -8,12 +8,13 @@ angular.module('okdoodle.services', [])
 
 .factory('UserService', function($http) {
 
+    var userObj = {};
   return {
     // on signin i want to get
     // get: function() {
     //   return $http.get('/api/login')//api user info
     // },
-    userObj: {},
+    userObj: userObj,
     post: function(data) { //data
       return $http({
         method: 'POST',
@@ -37,7 +38,7 @@ angular.module('okdoodle.services', [])
       });
     },
     postChange: function(data) {
-
+      console.log('postchanging');
       return $http({
         method: 'POST',
         url: '/api/new',
