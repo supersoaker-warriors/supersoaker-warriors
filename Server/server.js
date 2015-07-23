@@ -51,11 +51,13 @@ app.post('/api/new', function (req, res) {
 //   updates: {email: 'new@email.com',
 //             age: 6,
 //             doodles: {0: {
+//                 all: "true",
 //                 deletions: { },
 //                 additions: { }
 
 //                         },
 //                       1: {
+//                       all: "false",  
 //                       deletions: { },
 //                       additions: { }
 //                     }
@@ -76,6 +78,10 @@ app.post('/api/update', function (req, res) {
   db.findOne(query, function (err, user) {
     if (err) {
       console.log(err);
+    }
+    if (Object.keys(user).length === 0) {
+      res.send("You are not logged in!");
+      return;
     }
     // store what is updated to be sent in a response message
     var sendMsg = ['updated: '];
@@ -100,8 +106,13 @@ app.post('/api/update', function (req, res) {
             // first, handle deletions:
             if ("deletions" in updates[key][doodle]) {
               sendMsg.push("---deletions---");
-              for (var loc in updates[key][doodle]["deletions"]) {
-                delete user.doodleArray[doodle][loc];
+              if (updates[key][doodle]["deletions"]["all"] === true ) {
+                user.doodleArray[doodle] = {};
+              }
+              else {
+                for (var loc in updates[key][doodle]["deletions"]) {
+                  delete user.doodleArray[doodle][loc];
+                }
               }
             }
             // then handle additions
