@@ -6,10 +6,9 @@ var path = require('path');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json());
+app.use(bodyParser.json());  
 
 app.use(express.static('client'));
-
 
 module.exports = app;
 var PORT = 3000;
@@ -34,7 +33,6 @@ app.get('/', function (req, res) {
   console.log(__dirname);
   res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
-
 
 app.post('/api/new', function (req, res) {
   console.log("post request received");
@@ -82,7 +80,7 @@ app.post('/api/new', function (req, res) {
 //                       1: {
 //                       deletions: { },
 //                       additions: { }
-//                     }
+//                     } 
 //             }
 //           }
 // };
@@ -113,7 +111,7 @@ app.post('/api/update', function (req, res) {
         if (key !== 'doodles') {
           user[key] = updates[key];
           console.log("key: ", key, updates[key]);
-          sendMsg.push(key);
+          sendMsg.push(key); 
         }
         // handle doodles a bit differently...
         else if (key === 'doodles') {
@@ -126,7 +124,7 @@ app.post('/api/update', function (req, res) {
               sendMsg.push("---deletions---");
               for (var loc in updates[key][doodle]["deletions"]) {
                 delete user.doodleArray[doodle][loc];
-              }
+              }              
             }
             // then handle additions
             if ("additions" in updates[key][doodle]) {
@@ -134,7 +132,7 @@ app.post('/api/update', function (req, res) {
               for (var loc in updates[key][doodle]["additions"]) {
                 console.log("!!! loc HERE", loc);
                 user.doodleArray[doodle][loc] = updates[key][doodle]["additions"][loc];
-              }
+              }              
             }
           }
         } //that's a lot of curly braces, isn't it?
@@ -154,7 +152,7 @@ app.post('/api/update', function (req, res) {
 });
 
 
-  // var update = {
+  // var update = {    
   //     first: req.body.first,
   //     last: req.body.last
   //     // email: req.body.email,
@@ -186,13 +184,13 @@ app.post('/api/login', function (req, res) {
   console.log("called!");
   db.findOne({
           username: username
-          },
+          }, 
     function (err, user) {
       if (err) {
         console.log(err);
       }
       else if (Object.keys(user).length === 0) {
-        res.send("User "+ username + " doesn't exist!");
+        res.send("User doesn't exist!");
       }
       else if (user.password !== password) {
         res.send("Password is incorrect!")
@@ -202,6 +200,7 @@ app.post('/api/login', function (req, res) {
       }
     })
 })
+
 
 
 var server = app.listen(PORT, function () {
@@ -217,7 +216,7 @@ var server = app.listen(PORT, function () {
 
 // var saveUser = function () {
 //   console.log("saveUser called");
-//   var user2 = new db({username: 'lisasimpson',
+//   var user2 = new db({username: 'lisasimpson', 
 //                       first: 'Lisa',
 //                       last: 'Simpson'
 //                     });
