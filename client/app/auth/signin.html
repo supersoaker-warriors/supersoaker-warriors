@@ -6,9 +6,9 @@
             <div class="wrap">
                 <p class="form-title">
                     Sign In</p>
-                <form class="login">
-                <input type="text" placeholder="Username" ng-model="username" />
-                <input type="password" placeholder="Password" ng-model="password"/>
+                <form class="login" ng-submit="auth.post()">
+                <input type="text" placeholder="Username" ng-model="auth.username" />
+                <input type="password" placeholder="Password" ng-model="auth.password"/>
                 <input type="submit" value="Sign In" class="btn btn-success btn-sm" />
                 </form>
             </div>

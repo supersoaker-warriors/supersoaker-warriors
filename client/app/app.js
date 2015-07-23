@@ -1,5 +1,6 @@
 //app.js
 angular.module('okdoodle', [
+  'okdoodle.services',
   'okdoodle.profile',
   'okdoodle.draw',
   'okdoodle.signin',

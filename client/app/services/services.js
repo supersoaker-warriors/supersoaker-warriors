@@ -4,7 +4,7 @@
 // use factories or services? idc to be honest.
 //TODO: figure out whether to use factories or services
 
-angular.module('okdoodle', [])
+angular.module('okdoodle.services', [])
 
 .factory('UserService', function($http) {
 
@@ -17,15 +17,24 @@ angular.module('okdoodle', [])
     post: function(data) { //data
       return $http({
         method: 'POST',
-        url: '/api/login'
-        data: {username: this.username,
-          password: this.password
-        }
+        url: '/api/login',
+        data: JSON.stringify(data)
+      })
+      .then(function(resp) {
+        console.log(resp);
+      });
+    },
+    postNew: function(data) {
+      return $http({
+        method: 'POST',
+        url: '/api/new',
+        data: JSON.stringify(data)
+      })
+      .then(function(resp) {
+        console.log(resp);
+      });
     }
-
-
   }
-
 })
 
 //   .factory('UserService', function ()/*TODO: does this 'require' anything? does it need to be required? */ {
