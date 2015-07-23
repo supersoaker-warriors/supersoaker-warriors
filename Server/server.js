@@ -184,7 +184,7 @@ app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
   console.log("called!");
-  db.find({
+  db.findOne({
           username: username
           },
     function (err, user) {
@@ -198,7 +198,7 @@ app.post('/api/login', function (req, res) {
         res.send("Password is incorrect!")
       }
       else {
-        res.json(user);
+        console.log(user);
       }
     })
 })
