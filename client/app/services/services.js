@@ -13,7 +13,7 @@ angular.module('okdoodle.services', [])
     // get: function() {
     //   return $http.get('/api/login')//api user info
     // },
-
+    userObj: {},
     post: function(data) { //data
       return $http({
         method: 'POST',
@@ -22,6 +22,8 @@ angular.module('okdoodle.services', [])
       })
       .then(function(resp) {
         console.log(resp);
+        //if !error
+        //userObj.username = resp.body.username
       });
     },
     postNew: function(data) {
@@ -33,9 +35,29 @@ angular.module('okdoodle.services', [])
       .then(function(resp) {
         console.log(resp);
       });
+    },
+    postChange: function(data) {
+
+      return $http({
+        method: 'POST',
+        url: '/api/new',
+        data: JSON.stringify(
+        {
+          username: userObj.username,
+          updates: {
+            doodles: {
+              0: data
+            }
+          }
+        })
+      })
+      .then(function(resp) {
+        console.log(resp);
+      });
     }
-  }
+  };
 })
+
 
 //   .factory('UserService', function ()/*TODO: does this 'require' anything? does it need to be required? */ {
 //   // this factory holds USER object and shares it between scopes.
@@ -67,7 +89,7 @@ angular.module('okdoodle.services', [])
 .factory('AjaxService', function ($http){
    //this is to handle any GET and POST requests
    // this will also handle the firebase update logic (which are simplified "get" and "posts")
-})
+});
 
 
 // app.post('/api/new', function (req, res) {
