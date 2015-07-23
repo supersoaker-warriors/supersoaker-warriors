@@ -20,9 +20,8 @@ angular.module('okdoodle.draw', [])
   this.deletions = {"all": false};
   this.save = function(){
     console.log("saving...");
-    UserService.postChange({0:{changes: this.changes,
-                            deletions: this.deletions}
-                          });
+    UserService.postChange({changes: this.changes,
+                            deletions: this.deletions});
   };
   this.blue = function(){
     this.settings.color = "00F";
