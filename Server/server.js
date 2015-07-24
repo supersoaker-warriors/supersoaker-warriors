@@ -53,13 +53,13 @@ app.post('/api/new', function (req, res) {
 //             doodles: {0: {
 //                 all: "true",
 //                 deletions: { },
-//                 additions: { }
+//                 changes: { }
 
 //                         },
 //                       1: {
 //                       all: "false",
 //                       deletions: { },
-//                       additions: { }
+//                       changes: { }
 //                     }
 //             }
 //           }
@@ -79,7 +79,9 @@ app.post('/api/update', function (req, res) {
     if (err) {
       console.log(err);
     }
+    console.log("user: ", user);
     if (Object.keys(user).length === 0) {
+      console.log("user is not logged in or does not exist!");
       res.send("You are not logged in!");
       return;
     }
@@ -100,12 +102,24 @@ app.post('/api/update', function (req, res) {
         // handle doodles a bit differently...
         else if (key === 'doodles') {
           sendMsg.push('doodles');
-          // since we have multiple doodles...
+          console.log("USER HERE: ", user);
+          // create an empy object inside doodle array if the array is empty
+          console.log(user['doodleArray']);
+
+          if (user['doodleArray'].length === 0 ) {
+            user.doodleArray.push({});
+          }
+          //for each doodle:
           for (var doodle in updates[key]) {
+            // if block below allows for a new doodle to be created
+            if (user.doodleArray[doodle] === undefined) {
+              user.doodleArray.push({});
+            }
             console.log("updates[key][doodle] ", updates[key][doodle]);
             // first, handle deletions:
             if ("deletions" in updates[key][doodle]) {
               sendMsg.push("---deletions---");
+              // if special key 'all' is true, wipe out that object
               if (updates[key][doodle]["deletions"]["all"] === true ) {
                 user.doodleArray[doodle] = {};
               }
@@ -116,26 +130,33 @@ app.post('/api/update', function (req, res) {
               }
             }
             // then handle additions
-            if ("additions" in updates[key][doodle]) {
-              sendMsg.push("---additions---");
-              for (var loc in updates[key][doodle]["additions"]) {
+            if ("changes" in updates[key][doodle]) {
+              sendMsg.push("---changes---");
+              for (var loc in updates[key][doodle]["changes"]) {
                 console.log("!!! loc HERE", loc);
-                user.doodleArray[doodle][loc] = updates[key][doodle]["additions"][loc];
+                user.doodleArray[doodle][loc] = updates[key][doodle]["changes"][loc];
               }
             }
           }
-        } //that's a lot of curly braces, isn't it?
+        } //that are a lot of curly braces, aren't there?
       }
     }
-    sendMsg = sendMsg.join(' ');
-    console.log(user);
-    res.send(user, sendMsg);
     user.save(function (err, user) {
       if (err) {
         console.log(err);
       }
       console.log('saved successfully!!!!:', user);
+      db.findOneAndUpdate(query, user, {upsert: true}, function (err, user) {
+        if (err) {
+          console.log(err);
+        }
+        console.log("FINAL USER: ", user);
+      });
     });
+    sendMsg = sendMsg.join(' ');
+    console.log(user);
+    res.send(user, sendMsg);
+
 
    });
 });
@@ -210,5 +231,3 @@ var findAllUsers = function () {
   });
 };
 findAllUsers();
-
-
