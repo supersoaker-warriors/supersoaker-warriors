@@ -11,7 +11,6 @@ angular.module('okdoodle.draw', [])
                  "Purple": "90F",
                  "Black": "000",
                  "White": "FFF"};
-  this.storePic = {};
   this.changes = {};
   this.deletions = {};
   this.truth = true;
@@ -31,18 +30,10 @@ angular.module('okdoodle.draw', [])
   };
   this.render = function(){
     this.truth = true;
-  }
+  };
+  this.user = UserService.userObj;
 })
 .factory('DrawingService', function(){
-  var colors = {"Red": "F00",
-                 "Orange": "F60",
-                 "Yellow": "FF0",
-                 "Green": "0F0",
-                 "Blue": "00F",
-                 "Pink": "F0F",
-                 "Purple": "90F",
-                 "Black": "000",
-                 "White": "FFF"}
 })
 // methods to look into addEventListener
 .directive('canvasDraw', ['$document', function($document) {
@@ -51,6 +42,7 @@ angular.module('okdoodle.draw', [])
     var drawDown = 'mousedown';
     var drawMove = 'mousemove';
     var drawUp = 'mouseup';
+    //for our legions of mobile users
     if ('ontouchstart' in window) {
       drawDown = 'touchstart';
       drawMove = 'touchmove';
@@ -58,7 +50,6 @@ angular.module('okdoodle.draw', [])
     }
     var color = scope.draw.settings;
     var pixelSize = 16;
-    var storePic = {};
 
     // console.log(element);
     var context = element[0].getContext('2d');
@@ -71,26 +62,34 @@ angular.module('okdoodle.draw', [])
     var currY;
     var xBitStart;
     var yBitStart;
-
     //note: this might be an ugly way to do this,
     // and this WILL cause problems in the great "scope draw" transition
+    var doodle = scope.draw.user.doodles[0];
     var changes = scope.draw.changes;
     var deletions = scope.draw.deletions;
+    console.log(doodle);
+    render();
     function render(){
+      for(var thing in doodle){
+        console.log("called!");
+        var newThang = thing.split(",");
+        var newX = newThang[0].slice(1);
+        var newY = newThang[1].slice(0, newThang[1].length-1);
+        newX = parseInt(newX);
+        newY = parseInt(newY);
+        draw(newX, newY, doodle[thing]);
 
+        console.log(newThang, newX, newY, doodle[thing]);
+      }
     }
     function update(xCoord, yCoord, color) {
       var key = "[" + xCoord + "," + yCoord + "]";
       var existing;
-      console.log("color: ",color)
       //checking if we are in "ERASE" mode
       if(color === "FFF"){
-        console.log("in deletions!");
         //was there already a deletion at this point?
         if(deletions[key]){
-          console.log("already deleted!");
-          console.log("changes: ", scope.draw.changes);
-          console.log("deletions: ", scope.draw.deletions);
+
           return;
         }
         //add a deletion
@@ -98,9 +97,6 @@ angular.module('okdoodle.draw', [])
         //was there a change that needs to be deleted?
         if(changes[key]){
           delete changes[key];
-          console.log("deleted change");
-          console.log("changes: ", scope.draw.changes);
-          console.log("deletions: ", scope.draw.deletions);
         }
         return;
       }
@@ -112,9 +108,6 @@ angular.module('okdoodle.draw', [])
       }
       changes[key] = color;
       deletions["all"] = false;
-      storePic[key] = color;
-      console.log("changes: ", scope.draw.changes);
-      console.log("deletions: ", scope.draw.deletions);
     }
     function drawSequence(e) {
       if(isDraw) {
