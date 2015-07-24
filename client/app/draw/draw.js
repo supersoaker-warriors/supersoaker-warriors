@@ -27,10 +27,12 @@ angular.module('okdoodle.draw', [])
     this.deletions= {"all": true};
     this.changes = {};
     this.truth = false;
+    this.renderOrig = [false];
   };
   this.render = function(){
     this.truth = true;
   };
+  this.renderOrig = [true];
   this.user = UserService.userObj;
 })
 .factory('DrawingService', function(){
@@ -62,13 +64,17 @@ angular.module('okdoodle.draw', [])
     var currY;
     var xBitStart;
     var yBitStart;
-    //note: this might be an ugly way to do this,
-    // and this WILL cause problems in the great "scope draw" transition
-    var doodle = scope.draw.user.doodles[0];
+    
+    var renderOrigArr = scope.draw.renderOrig;
     var changes = scope.draw.changes;
     var deletions = scope.draw.deletions;
     console.log(doodle);
-    render();
+    if(scope.draw.user.doodles && renderOrigArr[0]){
+      console.log(renderOrigArr);
+      var doodle = scope.draw.user.doodles[0];
+      render();
+    }
+
     function render(){
       for(var thing in doodle){
         console.log("called!");
