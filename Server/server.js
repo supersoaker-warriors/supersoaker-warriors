@@ -22,7 +22,6 @@ app.get('/', function (req, res) {
 app.post('/api/new', function (req, res) {
   console.log("post request received");
   console.log("body:",  req.body);
-  res.send('post worked');
   var newUser = db({
       username: req.body.username,
       first: req.body.first,
@@ -35,10 +34,11 @@ app.post('/api/new', function (req, res) {
   newUser.save(function (err, userObj) {
     if (err) {
       console.log("error creating user: ", err);
-      res.send('user saved successfully');
+      res.send('MIKE.');
     }
     else {
       console.log('user saved successfully: ', userObj);
+      res.send(userObj);
     }
 
   });
