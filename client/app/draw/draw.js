@@ -14,6 +14,7 @@ angular.module('okdoodle.draw', [])
   this.storePic = {};
   this.changes = {};
   this.deletions = {};
+  this.truth = true;
   this.setColor = function(color) {
     this.settings.color = color;
   };
@@ -23,42 +24,28 @@ angular.module('okdoodle.draw', [])
     UserService.postChange({changes: this.changes,
                             deletions: this.deletions});
   };
-  this.blue = function(){
-    this.settings.color = "00F";
-  };
   this.clear = function(){
     this.deletions= {"all": true};
     this.changes = {};
+    this.truth = false;
   };
-
-  // $http.get('/api/')
-  // .success(function(data) {
-  //   this.storePic = JSON.parse(data);
-  // })
-  // .error(function() {
-  //   console.log('error with get request for draw');
-  // });
-  //THIS IS REPLACEABLE.
-  // need an Alias for the canvas element, and unfortunately
-  //might need to use angular's jqlite in lieu of true two-way data binding.
-  // other options: maybe store each
-  //this.currentCanvas = angular.element(??)
-  // use scope.$watch for changes in any options (e.g. color, width);
+  this.render = function(){
+    this.truth = true;
+  }
 })
 .factory('DrawingService', function(){
-  //TODO: this should contain drawing-specific elements that aren't used anywhere else.
-  // should have a variable that points to the selected drawing in "UserProperties".
-  // The object containing x/y coordinates shouldn't be stored here. that should be stored in userService
-  // (or elsewhere, or) in app.js or profile.js. Why? that object needs to be referenced both in the "draw" view and in the
-  // "profile" view (as a smaller thumbnail).
-  // We should also call methods from a dedicated factory for routing here: making POST requests on saves, for instance.
+  var colors = {"Red": "F00",
+                 "Orange": "F60",
+                 "Yellow": "FF0",
+                 "Green": "0F0",
+                 "Blue": "00F",
+                 "Pink": "F0F",
+                 "Purple": "90F",
+                 "Black": "000",
+                 "White": "FFF"}
 })
 // methods to look into addEventListener
 .directive('canvasDraw', ['$document', function($document) {
-  //TODO: consider moving pix variable elsewhere, DEFINITELY move storePic elsewhere
-  // this is a temporary storage location to practice
-  // storing rect coords. It is absolutely dispensable.
-
   // function that takes care of drawing on canvas
   function doodle(scope, element, attrs) {
     var drawDown = 'mousedown';
@@ -84,13 +71,14 @@ angular.module('okdoodle.draw', [])
     var currY;
     var xBitStart;
     var yBitStart;
+
     //note: this might be an ugly way to do this,
     // and this WILL cause problems in the great "scope draw" transition
     var changes = scope.draw.changes;
     var deletions = scope.draw.deletions;
-    //this function stores coordinates in the temp object. the temp object should be moved at some point,
-    // but it still makes sense to update a drawing in local memory before sending it off to firebase
-    // so we can implement saves and undos
+    function render(){
+
+    }
     function update(xCoord, yCoord, color) {
       var key = "[" + xCoord + "," + yCoord + "]";
       var existing;
@@ -121,9 +109,9 @@ angular.module('okdoodle.draw', [])
       }
       if(scope.draw.deletions[key]){
         delete deletions[key];
-        deletions[all]=false;
       }
       changes[key] = color;
+      deletions["all"] = false;
       storePic[key] = color;
       console.log("changes: ", scope.draw.changes);
       console.log("deletions: ", scope.draw.deletions);
@@ -139,10 +127,8 @@ angular.module('okdoodle.draw', [])
         // the X and Y coordinates that we're gonna store:
         xCoord = Math.floor(currX/pixelSize);
         yCoord = Math.floor(currY/pixelSize);
-        xBitStart = xCoord * pixelSize;
-        yBitStart = yCoord * pixelSize;
         if(!((xCoord === prevX) && (yCoord === prevY))){
-          draw(xBitStart, yBitStart, color.color);
+          draw(xCoord, yCoord, color.color);
           //third argument should be color variable (hardcoded for now)
           update(xCoord, yCoord, color.color);
         }
@@ -179,7 +165,9 @@ angular.module('okdoodle.draw', [])
       // $document.off('mouseup', mouseup);
     });
     // canvas methods that draw from point to point
-    function draw(xBitStart, yBitStart, shade) {
+    function draw(x, y, shade) {
+      xBitStart = x * pixelSize;
+      yBitStart = y * pixelSize;
       context.fillStyle = "#" + shade;
       // this starts a rectangle at the current X and Y, with a size of "pixelSize"
       context.fillRect(xBitStart, yBitStart, pixelSize, pixelSize);
@@ -192,10 +180,3 @@ angular.module('okdoodle.draw', [])
     link: doodle
   };
 }]);
-// .directive('myDraggable', ['$document', function($document) {
-//   console.log('hey');
-//   return {
-//     link: function(scope, element, attr) {
-//       }
-//   };
-// }]);
