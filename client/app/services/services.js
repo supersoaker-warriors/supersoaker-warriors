@@ -40,9 +40,11 @@ angular.module('okdoodle.services', [])
       })
       .then(function(resp) {
         console.log(resp);
+        userObj.username = resp.data.username;
+        userObj.doodles = resp.data.doodleArray;
         $rootScope.currentUser = userObj.username;
         $rootScope.loggedIn = true;
-        $state.go('draw');
+        $state.go('signin');
       });
     },
     postChange: function(data) {
