@@ -39,15 +39,15 @@ angular.module('okdoodle.draw', [])
 .directive('canvasDraw', ['$document', function($document) {
   // function that takes care of drawing on canvas
   function doodle(scope, element, attrs) {
-    var drawDown = 'mousedown';
-    var drawMove = 'mousemove';
-    var drawUp = 'mouseup';
+    // var drawDown = 'mousedown';
+    // var drawMove = 'mousemove';
+    // var drawUp = 'mouseup';
     //for our legions of mobile users
-    if ('ontouchstart' in window) {
-      drawDown = 'touchstart';
-      drawMove = 'touchmove';
-      drawUp = 'touchend';
-    }
+    // if ('ontouchstart' in window) {
+    //   drawDown = 'touchstart';
+    //   drawMove = 'touchmove';
+    //   drawUp = 'touchend';
+    // }
     var color = scope.draw.settings;
     var pixelSize = 16;
 
@@ -129,7 +129,7 @@ angular.module('okdoodle.draw', [])
         prevY = yCoord;
       }
     }
-    element.on(drawDown, function(e) {
+    element.on('mousedown', function(e) {
       //The old logic is commented out: too space-intensive
       // to integrate path drawings into a simple bitmap.
       // It should NOT be deleted, because it could lead to another
@@ -144,13 +144,13 @@ angular.module('okdoodle.draw', [])
       // $document.on('mousemove', mousemove);
       // $document.on('mouseup', mouseup);
     });
-    element.on(drawMove, function(e) {
+    element.on('mousemove', function(e) {
       // only begin drawing if mouse is down.
       // TODO: find out why mouse up doesn't register off canvas
       drawSequence(e);
     });
     // stops drawing on event.
-    element.on(drawUp, function(e) {
+    element.on('mouseup', function(e) {
       isDraw = false;
       prevX = null;
       prevY = null;
