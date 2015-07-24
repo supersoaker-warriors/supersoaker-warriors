@@ -108,7 +108,7 @@ app.post('/api/update', function (req, res) {
 
           if (user['doodleArray'].length === 0 ) {
             user.doodleArray.push({});
-          } 
+          }
           //for each doodle:
           for (var doodle in updates[key]) {
             // if block below allows for a new doodle to be created
@@ -231,5 +231,3 @@ var findAllUsers = function () {
   });
 };
 findAllUsers();
-
-

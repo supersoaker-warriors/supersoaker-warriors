@@ -6,7 +6,7 @@
 
 angular.module('okdoodle.services', [])
 
-.factory('UserService', function($http) {
+.factory('UserService', function($http, $state, $rootScope) {
 
   var userObj = {};
   return {
@@ -26,6 +26,9 @@ angular.module('okdoodle.services', [])
         //if !error
         userObj.username = resp.data.username;
         userObj.doodles = resp.data.doodleArray;
+        $rootScope.currentUser = userObj.username;
+        $rootScope.loggedIn = true;
+        $state.go('draw');
         // console.log(userObj);
       });
     },
@@ -37,6 +40,9 @@ angular.module('okdoodle.services', [])
       })
       .then(function(resp) {
         console.log(resp);
+        $rootScope.currentUser = userObj.username;
+        $rootScope.loggedIn = true;
+        $state.go('draw');
       });
     },
     postChange: function(data) {
@@ -57,6 +63,9 @@ angular.module('okdoodle.services', [])
       .then(function(resp) {
         console.log(resp);
       });
+    },
+    isLoggedIn: function() {
+      return true;
     }
   };
 })
