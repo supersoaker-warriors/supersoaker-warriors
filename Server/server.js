@@ -113,18 +113,22 @@ app.post('/api/update', function (req, res) {
           //for each doodle:
           for (var doodle in updates[key]) {
             // if block below allows for a new doodle to be created
-            if (user.doodleArray[doodle] === undefined) {
-              user.doodleArray.push({});
+            if (user.doodleArray[doodle] === undefined || user.doodleArray[doodle] === null) {
+              user.doodleArray.doodle = {};
+              console.log('DOODLEARRAY IS: ')
+              console.log(user.doodleArray.doodle)
             }
             console.log("updates[key][doodle] ", updates[key][doodle]);
             // first, handle deletions:
-            if ("deletions" in updates[key][doodle]) {
-              sendMsg.push("---deletions---");
+            if ("deletions" in updates[key][doodle]['deletions']) {
+              
               // if special key 'all' is true, wipe out that object
               if (updates[key][doodle]["deletions"]["all"] === true ) {
                 user.doodleArray[doodle] = {};
+                sendMsg.push("---deletions---");
               }
-              else {
+              else if (Object.keys(updates[key][doodle]['deletions']).length > 1) {
+                sendMsg.push("---deletions---");
                 for (var loc in updates[key][doodle]["deletions"]) {
                   delete user.doodleArray[doodle][loc];
                 }
@@ -132,10 +136,23 @@ app.post('/api/update', function (req, res) {
             }
             // then handle additions
             if ("changes" in updates[key][doodle]) {
+              // moms spaghetti
+              if (user.doodleArray[doodle] === null) {
+                user.doodleArray[doodle] =  updates[key][doodle]["changes"];
+              }
+              // console.log("user.doodleArray ", user.doodleArray);
+              // console.log("user.doodleArray.doodle ", user.doodleArray.doodle)
               sendMsg.push("---changes---");
               for (var loc in updates[key][doodle]["changes"]) {
-                console.log("!!! loc HERE", loc);
-                user.doodleArray[doodle][loc] = updates[key][doodle]["changes"][loc];
+                // console.log(typeof updates[key][doodle])
+
+                // console.log("!!! loc HERE", loc);
+                // console.log("user.doodleArray.doodle ", user.doodleArray.doodle)
+                // console.log("updates[key][doodle]['changes'][loc]: ",updates[key][doodle]["changes"][loc]);
+                //console.log("user.doodleArray[doodle][loc] ",user.doodleArray[doodle][loc]);
+                if (typeof user.doodleArray[doodle] === "object" && user.doodleArray[doodle] !== null) {
+                  user.doodleArray[doodle][loc] = updates[key][doodle]["changes"][loc];
+                }
               }
             }
           }
