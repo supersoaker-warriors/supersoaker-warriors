@@ -7,13 +7,32 @@ angular.module('okdoodle', [
   'okdoodle.signup',
   'ui.router'
 ])
-// .run(function($state, $rootScope) {
-//   $rootScope.$on('$stateChangeStart', function(e, to) {
-//     if(to.data && to.data.isLogin) {
-
-//     }
-//   })
-// })
+.run(function($state, $rootScope, $timeout, UserService) {
+  $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+    console.log('change state to ', toState.name);
+    // shouldn't be able to access other pages if not signed in
+    if(toState.name !== 'signin' && toState.name !== 'signup' && !$rootScope.loggedIn) {
+      $timeout(function() {
+        $state.go('signin');
+      });
+    }
+    //   UserService.isLoggedIn()
+    //   .then(function(auth) {
+    //     console.log('auth: ', auth);
+    //     if (auth) {
+    //       $rootScope.loggedIn = true;
+    //     } else {
+    //       $rootScope.loggenIn = false;
+    //     }
+    //   });
+    // } else
+    if ($rootScope.loggedIn && (toState.name === 'signin' || toState.name === 'signup')) {
+      $timeout(function() {
+        $state.go('draw');
+      });
+    }
+  });
+})
 .config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/draw');
   $stateProvider
