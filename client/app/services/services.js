@@ -8,7 +8,7 @@ angular.module('okdoodle.services', [])
 
 .factory('UserService', function($http) {
 
-    var userObj = {};
+  var userObj = {};
   return {
     // on signin i want to get
     // get: function() {
@@ -22,9 +22,11 @@ angular.module('okdoodle.services', [])
         data: JSON.stringify(data)
       })
       .then(function(resp) {
-        console.log(resp);
+        // console.log(resp);
         //if !error
-        //userObj.username = resp.body.username
+        userObj.username = resp.data.username;
+        userObj.doodles = resp.data.doodleArray;
+        // console.log(userObj);
       });
     },
     postNew: function(data) {
