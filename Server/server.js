@@ -73,6 +73,7 @@ app.post('/api/update', function (req, res) {
   console.log("updates: ", updates);
   // query is the criteria to find user we want to update
   var query = { username: req.body.username };
+  console.log("QUERY ", query);
 
   //find the actual user
   db.findOne(query, function (err, user) {
