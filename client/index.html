@@ -29,9 +29,9 @@
           <ul class="nav navbar-nav">
             <!-- TODO: change active class -->
             <!-- BUG: navbar not showing -->
-            <li class="active"><a ui-sref="signin">Sign In</a></li>
-            <li><a ui-sref="profile">Profile</a></li>
-            <li><a ui-sref="signup">Sign Up</a></li>
+            <li ng-class="{active: tab === 1}"><a ui-sref="signin" ng-click="tab = 1">Sign In</a></li>
+            <li ng-class="{active: tab === 2}"><a ui-sref="signup" ng-click="tab = 2">Sign Up</a></li>
+            <li ng-class="{active: tab === 3}"><a ui-sref="profile" ng-click="tab = 3">Profile</a></li>
           </ul>
         </div>
       </div>

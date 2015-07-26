@@ -121,7 +121,7 @@ app.post('/api/update', function (req, res) {
             console.log("updates[key][doodle] ", updates[key][doodle]);
             // first, handle deletions:
             if ("deletions" in updates[key][doodle]['deletions']) {
-              
+
               // if special key 'all' is true, wipe out that object
               if (updates[key][doodle]["deletions"]["all"] === true ) {
                 user.doodleArray[doodle] = {};
