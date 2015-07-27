@@ -9,12 +9,26 @@ angular.module('okdoodle.services', [])
 .factory('UserService', function($http, $state, $rootScope) {
 
   var userObj = {};
+  var all = {};
   return {
     // on signin i want to get
     // get: function() {
     //   return $http.get('/api/login')//api user info
     // },
     userObj: userObj,
+    all: all,
+
+    browse: function() {
+      return $http({
+        method: 'GET',
+        url: '/api/browse'
+      })
+      .then(function(resp) {
+        console.log(resp);
+        all.drawings = resp;
+      });
+    },
+
     post: function(data) { //data
       return $http({
         method: 'POST',

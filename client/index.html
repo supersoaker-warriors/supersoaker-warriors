@@ -35,6 +35,7 @@
             <li ng-class="{active: tab === 1}"><a ui-sref="signin" ng-click="tab = 1">Sign In</a></li>
             <li ng-class="{active: tab === 2}"><a ui-sref="signup" ng-click="tab = 2">Sign Up</a></li>
             <li ng-class="{active: tab === 3}"><a ui-sref="profile" ng-click="tab = 3">Profile</a></li>
+             <li ng-class="{active: tab === 4}"><a ui-sref="browse" ng-click="tab = 4">Browse</a></li>
           </ul>
         </div>
       </div>
@@ -62,6 +63,7 @@
   <!-- we haven't used the ui-router yet -->
   <script src="lib/angular-bootstrap/ui-bootstrap.js"></script>
   <script src="app/services/services.js"></script>
+  <script src="app/browse/browse.js"></script>
   <script src="app/auth/signin.js"></script>
   <script src="app/auth/signup.js"></script>
   <script src="app/profile/profile.js"></script>

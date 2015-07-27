@@ -35,7 +35,7 @@ app.get('/api/browse', function (req, res) {
     }
     res.send(data);
     console.log(data);
-  })
+  });
 
 
 });
@@ -136,8 +136,8 @@ app.post('/api/update', function (req, res) {
             // if block below allows for a new doodle to be created
             if (user.doodleArray[doodle] === undefined || user.doodleArray[doodle] === null) {
               user.doodleArray.doodle = {};
-              console.log('DOODLEARRAY IS: ')
-              console.log(user.doodleArray.doodle)
+              console.log('DOODLEARRAY IS: ');
+              console.log(user.doodleArray.doodle);
             }
             console.log("updates[key][doodle] ", updates[key][doodle]);
             // first, handle deletions:

@@ -1,4 +1,3 @@
-// draw.js
 angular.module('okdoodle.profile')
 .controller('DrawController', function ($rootScope, $http, UserService, DrawingService) {
  // this.selected = 0;
