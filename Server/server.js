@@ -149,12 +149,14 @@ app.post('/api/update', function (req, res) {
                 sendMsg.push("---deletions---");
               }
 
-              else {//if (Object.keys(updates[key][doodle]['deletions']).length > 1) {
+              else if (Object.keys(updates[key][doodle]['deletions']).length > 1) {
                 sendMsg.push("---deletions---");
                 console.log("deletions");
                 for (var loc in updates[key][doodle]["deletions"]) {
-                  console.log(loc, " deleted");
-                  delete user.doodleArray[doodle][loc];
+                  if (user.doodleArray[doodle][loc] !== undefined) {                    
+                    console.log(loc, " deleted");
+                    delete user.doodleArray[doodle][loc];
+                  }
                 }
               }
             }
