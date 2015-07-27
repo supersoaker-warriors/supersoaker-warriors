@@ -141,16 +141,19 @@ app.post('/api/update', function (req, res) {
             }
             console.log("updates[key][doodle] ", updates[key][doodle]);
             // first, handle deletions:
-            if ("deletions" in updates[key][doodle]['deletions']) {
+            if ("deletions" in updates[key][doodle]) {
 
               // if special key 'all' is true, wipe out that object
               if (updates[key][doodle]["deletions"]["all"] === true ) {
                 user.doodleArray[doodle] = {};
                 sendMsg.push("---deletions---");
               }
-              else if (Object.keys(updates[key][doodle]['deletions']).length > 1) {
+
+              else {//if (Object.keys(updates[key][doodle]['deletions']).length > 1) {
                 sendMsg.push("---deletions---");
+                console.log("deletions");
                 for (var loc in updates[key][doodle]["deletions"]) {
+                  console.log(loc, " deleted");
                   delete user.doodleArray[doodle][loc];
                 }
               }
