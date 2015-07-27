@@ -19,6 +19,27 @@ app.get('/', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
+app.get('/api/browse', function (req, res) {
+  console.log("browse called");
+  // return all doodles
+  var returnObj = {};
+  var query = {doodleArray: {$exists: true, $ne: null}};
+  // query.doodleArray = {$exists: true,
+                        // $not:size: 0};
+  db.find(query)
+  .limit(10)
+  .sort({date: -1})
+  .exec(function (err, data) {
+    if (err) {
+      console.log("error: ", err);
+    }
+    res.send(data);
+    console.log(data);
+  })
+
+
+});
+
 app.post('/api/new', function (req, res) {
   console.log("post request received");
   console.log("body:",  req.body);
@@ -67,7 +88,7 @@ app.post('/api/new', function (req, res) {
 
 
 app.post('/api/update', function (req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   //updates will contain all fields, including doogles, that we want to change
   var updates = req.body.updates;
   console.log("updates: ", updates);
