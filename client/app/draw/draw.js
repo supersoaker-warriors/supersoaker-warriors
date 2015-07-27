@@ -1,6 +1,16 @@
 // draw.js
 angular.module('okdoodle.profile')
-.controller('DrawController', function ($http, UserService, DrawingService) {
+.controller('DrawController', function ($rootScope, $http, UserService, DrawingService) {
+ // this.selected = 0;
+  var that = this;
+  this.currentPic = 0;
+  $rootScope.$on('changedProf', function(clickedPhoto){
+    that.currentPic = clickedPhoto; 
+    console.log(that);
+    that.clear();
+    setTimeout(function(){ 
+      that.render();}, 100);
+  });
   this.settings = {"color": "000"};
   this.colors = {"Red": "F00",
                  "Orange": "F60",
@@ -21,6 +31,9 @@ angular.module('okdoodle.profile')
   this.save = function(){
     var sendableObj = DrawingService.save(this.changes, this.deletions);
     UserService.postChange(sendableObj);
+    console.log("this: ",this);
+    console.log("that: ", that);
+//    console.log(this.selected);
   }
   this.clear = function(){
     this.deletions= {"all": true};
@@ -33,6 +46,7 @@ angular.module('okdoodle.profile')
   };
   this.renderOrig = [true];
   this.user = UserService.userObj;
+
 })
 .factory('DrawingService', function(){
   var selected = 0;
@@ -59,7 +73,6 @@ angular.module('okdoodle.profile')
 // methods to look into addEventListener
 .directive('canvasDraw', ['$document', function($document) {
   // function that takes care of drawing on canvas
-  var whoop = "ayy";
   function doodle(scope, element, attrs) {
     var color = scope.draw.settings;
     var pixelSize = 16;
@@ -77,15 +90,15 @@ angular.module('okdoodle.profile')
     var renderOrigArr = scope.draw.renderOrig;
     var changes = scope.draw.changes;
     var deletions = scope.draw.deletions;
+    var doodleNum = scope.draw.currentPic;
 
     if(scope.draw.user.doodles && renderOrigArr[0]){
-      var doodle = scope.draw.user.doodles[0];
+      var doodle = scope.draw.user.doodles[doodleNum];
       render();
     }
 
     function render(){
       for(var thing in doodle){
-        console.log("called!");
         var newThang = thing.split(",");
         var newX = newThang[0].slice(1);
         var newY = newThang[1].slice(0, newThang[1].length-1);
