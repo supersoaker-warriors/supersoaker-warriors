@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OkDoodle</title>
+</head>
+<body>
+  What's up.
+
+ <hr>
+  <form method="POST" action="api/new">
+    Username:
+    <input type="text" name="username"><br>
+    Password:
+    <input type="password" name="password"><br>
+    First Name:
+    <input type="text" name="first"><br>
+    Last Name:
+    <input type="text" name="last"><br>
+    <input type="submit" value = "Submit">
+  </form>
+  <br>
+  <hr>
+
+  <form method="POST" action="/api/login">
+    Username:
+    <input type="password" name="username"><br>
+    Password:
+    <input type="text" name="password"><br>
+    <input type="submit" value = "Submit">
+  </form>
+   <hr>
+
+  <form method="POST" action="api/update">
+    Username:
+    <input type="text" name="username"><br>
+    Password:
+    <input type="password" name="password"><br>
+    First Name:
+    <input type="text" name="update.first"><br>
+    Last Name:
+    <input type="text" name="update.last"><br>
+    <input type="submit" value = "Submit">
+  </form>
+  <br>
+
+
+
+
+</body>
+</html>
+
