@@ -1,11 +1,12 @@
 
 <div class="container">
-<span>Drawing view sees: {{draw.selected}}</span>
+<!--WARNING: THAR BE HACKS AHEAD -->
+<span>Drawing view sees: {{draw.currentPic = profile.selected}}</span>
   <div id="canvasHolder">
      <!-- <span my-draggable>Drag ME</span> -->
      <!-- NOTE: if using bitwise, canvas size should be divisible by pixel size -->
      <!-- ALSO: keep an eye on canvasHolder size if deciding to change sizing -->
-    <canvas ng-if="draw.truth" canvas-draw id='drawing' width='504' height='504'></canvas>
+    <canvas ng-if="draw.truth" canvas-draw id='drawing' width='512' height='512'></canvas>
   </div>
   <button ng-click="draw.save()" class="btn btn-success btn-sm">Save</button>
   <button ng-mousedown="draw.clear()" ng-mouseup="draw.render()" class="btn btn-success btn-sm">Clear</button>
