@@ -1,14 +1,13 @@
-// draw.js
 angular.module('okdoodle.profile')
 .controller('DrawController', function ($rootScope, $http, UserService, DrawingService) {
  // this.selected = 0;
   var that = this;
   this.currentPic = 0;
   $rootScope.$on('changedProf', function(clickedPhoto){
-    that.currentPic = clickedPhoto; 
+    that.currentPic = clickedPhoto;
     console.log(that);
     that.clear();
-    setTimeout(function(){ 
+    setTimeout(function(){
       that.render();}, 100);
   });
   this.settings = {"color": "000"};
@@ -86,7 +85,7 @@ angular.module('okdoodle.profile')
     var currY;
     var xBitStart;
     var yBitStart;
-    
+
     var renderOrigArr = scope.draw.renderOrig;
     var changes = scope.draw.changes;
     var deletions = scope.draw.deletions;

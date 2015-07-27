@@ -4,6 +4,7 @@ angular.module('okdoodle', [
   'okdoodle.profile',
   'okdoodle.signin',
   'okdoodle.signup',
+  'okdoodle.browse',
   'ui.router'
 ])
 .run(function($state, $rootScope, $timeout, UserService) {
@@ -65,6 +66,14 @@ angular.module('okdoodle', [
       controller: 'DrawController as draw',
       data: {
         isLogin: true
+      }
+    })
+    .state('browse', {
+      url: '/browse',
+      templateUrl: './app/browse/browse.html',
+      controller: 'BrowseController as browse',
+      data: {
+        isLogin: false
       }
     });
 });

@@ -9,64 +9,80 @@ angular.module('okdoodle.services', [])
 .factory('UserService', function($http, $state, $rootScope) {
 
   var userObj = {};
+  var all = {};
+  var browse= function() {
+    return $http({
+      method: 'GET',
+      url: '/api/browse'
+    })
+    .then(function(resp) {
+      console.log(resp.data);
+      all.drawings = resp.data;
+    });
+  };
+
+  var post = function(data) { //data
+    return $http({
+      method: 'POST',
+      url: '/api/login',
+      data: JSON.stringify(data)
+    })
+    .then(function(resp) {
+      // console.log(resp);
+      //if !error
+      userObj.username = resp.data.username;
+      userObj.doodles = resp.data.doodleArray;
+      $rootScope.currentUser = userObj.username;
+      $rootScope.loggedIn = true;
+      $state.go('profile.draw');
+      browse();
+      // console.log(userObj);
+    });
+  };
+  var postNew= function(data) {
+    return $http({
+      method: 'POST',
+      url: '/api/new',
+      data: JSON.stringify(data)
+    })
+    .then(function(resp) {
+      console.log(resp);
+      userObj.username = resp.data.username;
+      userObj.doodles = resp.data.doodleArray;
+      $rootScope.currentUser = userObj.username;
+      $rootScope.loggedIn = true;
+      $state.go('signin');
+      browse();
+    });
+  };
+  var postChange = function(data) {
+    console.log('postchanging');
+    return $http({
+      method: 'POST',
+      url: '/api/update',
+      data: JSON.stringify(
+      {
+        username: userObj.username,
+        updates: {
+          doodles: data
+        }
+      })
+    })
+    .then(function(resp) {
+      console.log(resp);
+    });
+  };
+  var isLoggedIn = function() {
+    return true;
+  };
   return {
-    // on signin i want to get
-    // get: function() {
-    //   return $http.get('/api/login')//api user info
-    // },
     userObj: userObj,
-    post: function(data) { //data
-      return $http({
-        method: 'POST',
-        url: '/api/login',
-        data: JSON.stringify(data)
-      })
-      .then(function(resp) {
-        // console.log(resp);
-        //if !error
-        userObj.username = resp.data.username;
-        userObj.doodles = resp.data.doodleArray;
-        $rootScope.currentUser = userObj.username;
-        $rootScope.loggedIn = true;
-        $state.go('profile.draw');
-        // console.log(userObj);
-      });
-    },
-    postNew: function(data) {
-      return $http({
-        method: 'POST',
-        url: '/api/new',
-        data: JSON.stringify(data)
-      })
-      .then(function(resp) {
-        console.log(resp);
-        userObj.username = resp.data.username;
-        userObj.doodles = resp.data.doodleArray;
-        $rootScope.currentUser = userObj.username;
-        $rootScope.loggedIn = true;
-        $state.go('signin');
-      });
-    },
-    postChange: function(data) {
-      console.log('postchanging');
-      return $http({
-        method: 'POST',
-        url: '/api/update',
-        data: JSON.stringify(
-        {
-          username: userObj.username,
-          updates: {
-            doodles: data
-          }
-        })
-      })
-      .then(function(resp) {
-        console.log(resp);
-      });
-    },
-    isLoggedIn: function() {
-      return true;
-    }
+    all: all,
+    browse: browse,
+    post: post,
+    postNew: postNew,
+    postChange: postChange,
+    isLoggedIn: isLoggedIn
   };
 })
 
