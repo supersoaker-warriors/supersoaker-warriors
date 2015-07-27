@@ -28,13 +28,13 @@ angular.module('okdoodle', [
     // } else
     if ($rootScope.loggedIn && (toState.name === 'signin' || toState.name === 'signup')) {
       $timeout(function() {
-        $state.go('draw');
+        $state.go('profile');
       });
     }
   });
 })
 .config(function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('/draw');
+  $urlRouterProvider.otherwise('/profile');
   $stateProvider
     .state('signin', {
       url: '/signin',
@@ -60,7 +60,7 @@ angular.module('okdoodle', [
         isLogin: true
       }
     })
-    .state('draw', {
+    .state('profile.draw', {
       url: '/draw',
       templateUrl: './app/draw/draw.html',
       controller: 'DrawController as draw',

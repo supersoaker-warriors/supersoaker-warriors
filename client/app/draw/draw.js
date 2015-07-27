@@ -1,6 +1,6 @@
 // draw.js
 angular.module('okdoodle.draw', [])
-.controller('DrawController', function ($http, UserService) {
+.controller('DrawController', function ($http, UserService, DrawingService) {
   this.settings = {"color": "000"};
   this.colors = {"Red": "F00",
                  "Orange": "F60",
@@ -19,10 +19,9 @@ angular.module('okdoodle.draw', [])
   };
   this.deletions = {"all": false};
   this.save = function(){
-    console.log("saving...");
-    UserService.postChange({changes: this.changes,
-                            deletions: this.deletions});
-  };
+    var sendableObj = DrawingService.save(this.selected, this.changes, this.deletions);
+    UserService.postChange(sendableObj);
+  }
   this.clear = function(){
     this.deletions= {"all": true};
     this.changes = {};
@@ -36,6 +35,21 @@ angular.module('okdoodle.draw', [])
   this.user = UserService.userObj;
 })
 .factory('DrawingService', function(){
+  var save = function(selected, changes, deletions){
+    //the 'or' operator is purely for test purposes
+    var selected = selected || 0;
+    console.log("saving...");
+    var returnObj = {};
+    returnObj[selected] = {changes: changes,
+                           deletions: deletions};
+    console.log('returning ', returnObj)
+    return returnObj;
+  };
+  return {
+    save: save
+  };
+    // UserService.postChange({changes: this.changes,
+    //                         deletions: this.deletions})
 })
 // methods to look into addEventListener
 .directive('canvasDraw', ['$document', function($document) {
