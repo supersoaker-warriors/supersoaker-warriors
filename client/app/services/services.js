@@ -28,7 +28,7 @@ angular.module('okdoodle.services', [])
         userObj.doodles = resp.data.doodleArray;
         $rootScope.currentUser = userObj.username;
         $rootScope.loggedIn = true;
-        $state.go('draw');
+        $state.go('profile.draw');
         // console.log(userObj);
       });
     },
@@ -56,9 +56,7 @@ angular.module('okdoodle.services', [])
         {
           username: userObj.username,
           updates: {
-            doodles: {
-              0: data
-            }
+            doodles: data
           }
         })
       })
