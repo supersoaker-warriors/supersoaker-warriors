@@ -1,5 +1,5 @@
 // draw.js
-angular.module('okdoodle.draw', [])
+angular.module('okdoodle.profile')
 .controller('DrawController', function ($http, UserService, DrawingService) {
   this.settings = {"color": "000"};
   this.colors = {"Red": "F00",
@@ -19,7 +19,7 @@ angular.module('okdoodle.draw', [])
   };
   this.deletions = {"all": false};
   this.save = function(){
-    var sendableObj = DrawingService.save(this.selected, this.changes, this.deletions);
+    var sendableObj = DrawingService.save(this.changes, this.deletions);
     UserService.postChange(sendableObj);
   }
   this.clear = function(){
@@ -35,9 +35,9 @@ angular.module('okdoodle.draw', [])
   this.user = UserService.userObj;
 })
 .factory('DrawingService', function(){
-  var save = function(selected, changes, deletions){
+  var selected = 0;
+  var save = function(changes, deletions){
     //the 'or' operator is purely for test purposes
-    var selected = selected || 0;
     console.log("saving...");
     var returnObj = {};
     returnObj[selected] = {changes: changes,
@@ -45,8 +45,13 @@ angular.module('okdoodle.draw', [])
     console.log('returning ', returnObj)
     return returnObj;
   };
+  var changeSelected = function(select) {
+    selected = select;
+  }
   return {
-    save: save
+    changeSelected: changeSelected,
+    save: save,
+    selected: selected
   };
     // UserService.postChange({changes: this.changes,
     //                         deletions: this.deletions})
@@ -54,20 +59,10 @@ angular.module('okdoodle.draw', [])
 // methods to look into addEventListener
 .directive('canvasDraw', ['$document', function($document) {
   // function that takes care of drawing on canvas
+  var whoop = "ayy";
   function doodle(scope, element, attrs) {
-    // var drawDown = 'mousedown';
-    // var drawMove = 'mousemove';
-    // var drawUp = 'mouseup';
-    //for our legions of mobile users
-    // if ('ontouchstart' in window) {
-    //   drawDown = 'touchstart';
-    //   drawMove = 'touchmove';
-    //   drawUp = 'touchend';
-    // }
     var color = scope.draw.settings;
     var pixelSize = 16;
-
-    // console.log(element);
     var context = element[0].getContext('2d');
     // true when mouse is down
     var isDraw = false;
@@ -82,9 +77,8 @@ angular.module('okdoodle.draw', [])
     var renderOrigArr = scope.draw.renderOrig;
     var changes = scope.draw.changes;
     var deletions = scope.draw.deletions;
-    console.log(doodle);
+
     if(scope.draw.user.doodles && renderOrigArr[0]){
-      console.log(renderOrigArr);
       var doodle = scope.draw.user.doodles[0];
       render();
     }
@@ -98,8 +92,6 @@ angular.module('okdoodle.draw', [])
         newX = parseInt(newX);
         newY = parseInt(newY);
         draw(newX, newY, doodle[thing]);
-
-        console.log(newThang, newX, newY, doodle[thing]);
       }
     }
     function update(xCoord, yCoord, color) {
