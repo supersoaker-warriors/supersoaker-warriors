@@ -11,7 +11,6 @@ angular.module('okdoodle.browse', ['ui.router'])
   this.selected = DrawingService.selected;
   this.changeSelect = function(clickedPhoto){
     DrawingService.changeSelected(clickedPhoto);
-    console.log("changed! with ", clickedPhoto);
     this.selected = clickedPhoto;
     $rootScope.$broadcast('changedProf', clickedPhoto);
   }
@@ -25,12 +24,10 @@ angular.module('okdoodle.browse', ['ui.router'])
     var xBitStart;
     var yBitStart;
     //THIS SCOPE IS NOT MODULAR.
-    console.log('scope.browse ', scope.browse);
     var doodle = scope.browse.user.drawings[0].doodleArray[0];
     render();
 
     function render(){
-      console.log("minirender called", scope);
       for(var thing in doodle){
         var newThang = thing.split(",");
         var newX = newThang[0].slice(1);
@@ -61,12 +58,10 @@ angular.module('okdoodle.browse', ['ui.router'])
     var xBitStart;
     var yBitStart;
     //THIS SCOPE IS NOT MODULAR.
-    console.log('scope.browse ', scope.browse);
     var doodle = scope.browse.user.drawings[1].doodleArray[0];
     render();
 
     function render(){
-      console.log("minirender called", scope);
       for(var thing in doodle){
         var newThang = thing.split(",");
         var newX = newThang[0].slice(1);
@@ -97,12 +92,10 @@ angular.module('okdoodle.browse', ['ui.router'])
     var xBitStart;
     var yBitStart;
     //THIS SCOPE IS NOT MODULAR.
-    console.log('scope.browse ', scope.browse);
     var doodle = scope.browse.user.drawings[2].doodleArray[0];
     render();
 
     function render(){
-      console.log("minirender called", scope);
       for(var thing in doodle){
         var newThang = thing.split(",");
         var newX = newThang[0].slice(1);

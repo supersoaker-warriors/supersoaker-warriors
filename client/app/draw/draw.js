@@ -5,7 +5,6 @@ angular.module('okdoodle.profile')
   this.currentPic = 0;
   $rootScope.$on('changedProf', function(clickedPhoto){
     that.currentPic = clickedPhoto;
-    console.log(that);
     that.clear();
     setTimeout(function(){
       that.render();}, 100);
@@ -30,9 +29,6 @@ angular.module('okdoodle.profile')
   this.save = function(){
     var sendableObj = DrawingService.save(this.changes, this.deletions);
     UserService.postChange(sendableObj);
-    console.log("this: ",this);
-    console.log("that: ", that);
-//    console.log(this.selected);
   }
   this.clear = function(){
     this.deletions= {"all": true};
@@ -55,7 +51,6 @@ angular.module('okdoodle.profile')
     var returnObj = {};
     returnObj[selected] = {changes: changes,
                            deletions: deletions};
-    console.log('returning ', returnObj)
     return returnObj;
   };
   var changeSelected = function(select) {
@@ -66,8 +61,6 @@ angular.module('okdoodle.profile')
     save: save,
     selected: selected
   };
-    // UserService.postChange({changes: this.changes,
-    //                         deletions: this.deletions})
 })
 // methods to look into addEventListener
 .directive('canvasDraw', ['$document', function($document) {
@@ -146,7 +139,6 @@ angular.module('okdoodle.profile')
         yCoord = Math.floor(currY/pixelSize);
         if(!((xCoord === prevX) && (yCoord === prevY))){
           draw(xCoord, yCoord, color.color);
-          //third argument should be color variable (hardcoded for now)
           update(xCoord, yCoord, color.color);
         }
         prevX = xCoord;
@@ -154,19 +146,10 @@ angular.module('okdoodle.profile')
       }
     }
     element.on('mousedown', function(e) {
-      //The old logic is commented out: too space-intensive
-      // to integrate path drawings into a simple bitmap.
-      // It should NOT be deleted, because it could lead to another
-      // feature/implementation down the road
       prevX = e.offsetX;
       prevY = e.offsetY;
-      // beginPath canvas method that allows us to draw based on a specific position.
-      //context.beginPath();
-      // start drawing
       isDraw = true;
       drawSequence(e);
-      // $document.on('mousemove', mousemove);
-      // $document.on('mouseup', mouseup);
     });
     element.on('mousemove', function(e) {
       // only begin drawing if mouse is down.
@@ -178,10 +161,8 @@ angular.module('okdoodle.profile')
       isDraw = false;
       prevX = null;
       prevY = null;
-      // $document.off('mousemove', mousemove);
-      // $document.off('mouseup', mouseup);
+
     });
-    // canvas methods that draw from point to point
     function draw(x, y, shade) {
       xBitStart = x * pixelSize;
       yBitStart = y * pixelSize;
@@ -191,8 +172,6 @@ angular.module('okdoodle.profile')
     }
   }
   return {
-    // this means the directive is restricted to Attributes with the name canvasDraw
-    // restrict: "A",
     // Allows us to manipulate the DOM directly
     link: doodle
   };
