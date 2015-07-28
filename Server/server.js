@@ -15,17 +15,13 @@ var PORT = 3000;
 
 
 app.get('/', function (req, res) {
-  console.log(__dirname);
   res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
 app.get('/api/browse', function (req, res) {
-  console.log("browse called");
   // return all doodles
   var returnObj = {};
   var query = {doodleArray: {$exists: true, $ne: null}};
-  // query.doodleArray = {$exists: true,
-                        // $not:size: 0};
   db.find(query)
   .limit(10)
   .sort({date: -1})
@@ -34,15 +30,13 @@ app.get('/api/browse', function (req, res) {
       console.log("error: ", err);
     }
     res.send(data);
-    console.log(data);
   });
 
 
 });
 
 app.post('/api/new', function (req, res) {
-  console.log("post request received");
-  console.log("body:",  req.body);
+  //create new user
   var newUser = db({
       username: req.body.username,
       first: req.body.first,
@@ -55,61 +49,31 @@ app.post('/api/new', function (req, res) {
   newUser.save(function (err, userObj) {
     if (err) {
       console.log("error creating user: ", err);
-      res.send('MIKE.');
     }
     else {
-      console.log('user saved successfully: ', userObj);
       res.send(userObj);
     }
 
   });
 });
 
-
-// var update_obj=
-// {
-//   username: 'bobbarker',
-//   updates: {email: 'new@email.com',
-//             age: 6,
-//             doodles: {0: {
-//                 all: "true",
-//                 deletions: { },
-//                 changes: { }
-
-//                         },
-//                       1: {
-//                       all: "false",
-//                       deletions: { },
-//                       changes: { }
-//                     }
-//             }
-//           }
-// };
-
-
 app.post('/api/update', function (req, res) {
-  // console.log(req.body);
   //updates will contain all fields, including doogles, that we want to change
   var updates = req.body.updates;
-  console.log("updates: ", updates);
   // query is the criteria to find user we want to update
   var query = { username: req.body.username };
-  console.log("QUERY ", query);
 
   //find the actual user
   db.findOne(query, function (err, user) {
     if (err) {
       console.log(err);
     }
-    console.log("user: ", user);
     if (Object.keys(user).length === 0) {
-      console.log("user is not logged in or does not exist!");
       res.send("You are not logged in!");
       return;
     }
     // store what is updated to be sent in a response message
     var sendMsg = ['updated: '];
-    console.log("updates: ", updates);
 
     for (var key in updates) {
 
@@ -118,15 +82,12 @@ app.post('/api/update', function (req, res) {
       if (updates[key] !== undefined) {
         if (key !== 'doodles') {
           user[key] = updates[key];
-          console.log("key: ", key, updates[key]);
           sendMsg.push(key);
         }
         // handle doodles a bit differently...
         else if (key === 'doodles') {
           sendMsg.push('doodles');
-          console.log("USER HERE: ", user);
           // create an empy object inside doodle array if the array is empty
-          console.log(user['doodleArray']);
 
           if (user['doodleArray'].length === 0 ) {
             user.doodleArray.push({});
@@ -136,14 +97,11 @@ app.post('/api/update', function (req, res) {
             // if block below allows for a new doodle to be created
             if (user.doodleArray[doodle] === undefined || user.doodleArray[doodle] === null) {
               user.doodleArray.doodle = {};
-              console.log('DOODLEARRAY IS: ');
-              console.log(user.doodleArray.doodle);
             }
-            console.log("updates[key][doodle] ", updates[key][doodle]);
             // first, handle deletions:
             if ("deletions" in updates[key][doodle]) {
 
-              // if special key 'all' is true, wipe out that object
+              // if special key 'all' is true, wipe out that object -- useful for clear option
               if (updates[key][doodle]["deletions"]["all"] === true ) {
                 user.doodleArray[doodle] = {};
                 sendMsg.push("---deletions---");
@@ -151,10 +109,8 @@ app.post('/api/update', function (req, res) {
 
               else if (Object.keys(updates[key][doodle]['deletions']).length > 1) {
                 sendMsg.push("---deletions---");
-                console.log("deletions");
                 for (var loc in updates[key][doodle]["deletions"]) {
                   if (user.doodleArray[doodle][loc] !== undefined) {                    
-                    console.log(loc, " deleted");
                     delete user.doodleArray[doodle][loc];
                   }
                 }
@@ -162,20 +118,12 @@ app.post('/api/update', function (req, res) {
             }
             // then handle additions
             if ("changes" in updates[key][doodle]) {
-              // moms spaghetti
               if (user.doodleArray[doodle] === null) {
                 user.doodleArray[doodle] =  updates[key][doodle]["changes"];
               }
-              // console.log("user.doodleArray ", user.doodleArray);
-              // console.log("user.doodleArray.doodle ", user.doodleArray.doodle)
               sendMsg.push("---changes---");
               for (var loc in updates[key][doodle]["changes"]) {
-                // console.log(typeof updates[key][doodle])
 
-                // console.log("!!! loc HERE", loc);
-                // console.log("user.doodleArray.doodle ", user.doodleArray.doodle)
-                // console.log("updates[key][doodle]['changes'][loc]: ",updates[key][doodle]["changes"][loc]);
-                //console.log("user.doodleArray[doodle][loc] ",user.doodleArray[doodle][loc]);
                 if (typeof user.doodleArray[doodle] === "object" && user.doodleArray[doodle] !== null) {
                   user.doodleArray[doodle][loc] = updates[key][doodle]["changes"][loc];
                 }
@@ -194,14 +142,10 @@ app.post('/api/update', function (req, res) {
         if (err) {
           console.log(err);
         }
-        console.log("FINAL USER: ", user);
       });
     });
     sendMsg = sendMsg.join(' ');
-    console.log(user);
     res.send(user, sendMsg);
-
-
    });
 });
 
@@ -209,13 +153,10 @@ app.post('/api/update', function (req, res) {
 app.post('/api/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
-  console.log("called!");
   db.findOne({
           username: username
           },
     function (err, user) {
-      console.log("user", user);
-      console.log("password ", password, user.password);
       if (err) {
         console.log(err);
       }
@@ -226,43 +167,20 @@ app.post('/api/login', function (req, res) {
         res.send("Password is incorrect!");
       }
       else {
+        //sends user object to client
         res.send(user);
       }
     });
 });
 
-
-
 var server = app.listen(PORT, function () {
   var host = server.address().address;
   var port = server.address().port;
 
-  console.log("Server listening at http://%s:%s", host, port);
-
-
 
 });
 
-
-// var saveUser = function () {
-//   console.log("saveUser called");
-//   var user2 = new db({username: 'lisasimpson',
-//                       first: 'Lisa',
-//                       last: 'Simpson'
-//                     });
-//   user2.save(function (err, userObj) {
-//     if (err) {
-//       console.log('error: ', err);
-//     }
-//     else {
-//       console.log('saved successfully:', userObj);
-//     }
-
-//   });
-
-// };
-//saveUser();
-
+// call this function if you want to print out all the data
 var findAllUsers = function () {
 
   db.find({}, function (err, docs) {
@@ -274,4 +192,4 @@ var findAllUsers = function () {
     }
   });
 };
-findAllUsers();
+
