@@ -1,0 +1,29 @@
+{
+  "name": "okaydoodle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pbbyeung/supersoaker-warriors.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pbbyeung/supersoaker-warriors/issues"
+  },
+  "homepage": "https://github.com/pbbyeung/supersoaker-warriors#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.13.2",
+    "express": "^4.13.1",
+    "express-session": "^1.11.3",
+    "firebase": "~2.2.7",
+    "mongoose": "~4.0.7",
+    "passport": "^0.2.2",
+    "passport-local": "^1.0.0"
+  }
+}

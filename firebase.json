@@ -1,0 +1,9 @@
+{
+  "firebase": "okdoodle",
+  "public": "Public/",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}

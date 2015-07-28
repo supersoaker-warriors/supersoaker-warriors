@@ -1,0 +1,18 @@
+<!-- profile view -->
+<!-- in lieu of a header, the tab will be set to 'active' in app.js -->
+<div>
+  <div class="container" id="hello">
+    <h1>{{ profile.user.username }}'s profile</h1>
+    <div class="container" ng-class="{active: profile.selected === 0}" ng-click="profile.changeSelect(0)">
+      <canvas canvas-mini class='thumbnail' width='128' height='128'></canvas>
+      <span> Photo 0 </span>
+    </div>
+    <div class="container" ng-class="{active: profile.selected === 1}" ng-click="profile.changeSelect(1)">
+      <canvas class='thumbnail' width='128' height='128'></canvas>
+      <span> Photo 1 </span>
+    </div>
+    <span>Profile sees: {{profile.selected}}</span>
+  </div>
+  <div ui-view>
+  </div>
+</div>

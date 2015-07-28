@@ -1,0 +1,19 @@
+/*styles */
+/* TODO: refactor using an appropriate Bootstrap element */
+#canvasHolder {
+  border: 10px solid black;
+  /* the fixed height and width could be a problem later if we change canvas size */
+  height: 532px;
+  width: 532px;
+}
+/*.signin {
+  background-image: url('../assets/shutterstock_57258430.png');
+}
+*/
+body {
+  background: url('../assets/shutterstock_57258430.png') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
